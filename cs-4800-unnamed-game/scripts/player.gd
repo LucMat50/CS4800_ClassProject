@@ -1,6 +1,20 @@
 extends CharacterBody2D
+
+# NORMAL VARIABLES
+var shoot_coolDown = false
+
+# CONSTANT VARIABLES
 const SPEED = 450
 const RUN_SPEED = 600
+
+# ONREADY VARAIBLES
+@onready var shooter = $Shooter
+
+# SIGNALS
+signal bullet_shot(bullet)
+
+# SCENES
+
 
 func get_input():
 	var input_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -8,7 +22,7 @@ func get_input():
 		velocity = input_direction * RUN_SPEED
 	else: 
 		velocity = input_direction * SPEED
-	
+
 func _physics_process(_delta: float) -> void:
 	get_input()
 	move_and_slide()
