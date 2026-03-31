@@ -4,16 +4,7 @@
 [ext_resource type="Script" uid="uid://268n0eqk6o8m" path="res://scripts/enemy.gd" id="1_md0e3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_md0e3"]
-radius = 59.413803
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_md0e3"]
-size = Vector2(60, 60)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_4ra3w"]
-radius = 104.393486
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_5uy6h"]
-radius = 152.0296
+radius = 32.06244
 
 [node name="Enemy" type="CharacterBody2D" unique_id=407558397 groups=["Enemy"]]
 script = ExtResource("1_md0e3")
@@ -23,25 +14,5 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_7p1mj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=923963319]
-visible = false
 shape = SubResource("CircleShape2D_md0e3")
 disabled = true
-
-[node name="Area2D" type="Area2D" parent="." unique_id=262529925]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1364531937]
-shape = SubResource("RectangleShape2D_md0e3")
-
-[node name="enter_area" type="Area2D" parent="." unique_id=984849583]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="enter_area" unique_id=343059539]
-shape = SubResource("CircleShape2D_4ra3w")
-
-[node name="exit_area" type="Area2D" parent="." unique_id=755284562]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="exit_area" unique_id=1457954440]
-shape = SubResource("CircleShape2D_5uy6h")
-
-[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
-[connection signal="body_entered" from="enter_area" to="." method="_on_enter_area_body_entered"]
-[connection signal="body_exited" from="exit_area" to="." method="_on_exit_area_body_exited"]
