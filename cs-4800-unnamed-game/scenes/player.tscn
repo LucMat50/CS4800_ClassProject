@@ -187,6 +187,7 @@ _data = {
 size = Vector2(25, 70)
 
 [node name="Player" type="CharacterBody2D" unique_id=835060394]
+z_index = 1
 script = ExtResource("1_g2els")
 
 [node name="Character" type="AnimatedSprite2D" parent="." unique_id=1761931942]
