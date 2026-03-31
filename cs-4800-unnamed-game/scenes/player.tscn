@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c17lnk8ttr3bc" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://pnw0hthlhi7f" path="res://assets/Player.png" id="2_g2els"]
+[ext_resource type="PackedScene" uid="uid://dkkeqrvxuail1" path="res://scenes/gun.tscn" id="3_qhqgy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qhqgy"]
 atlas = ExtResource("2_g2els")
@@ -204,3 +205,6 @@ position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_g2els")
 
 [node name="Shooter" type="Node2D" parent="." unique_id=1429981833]
+
+[node name="Gun" parent="Shooter" unique_id=1052325760 instance=ExtResource("3_qhqgy")]
+position = Vector2(0, -65)
