@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Player=""
 Enemy=""
+Bullet=""
 
 [input]
 

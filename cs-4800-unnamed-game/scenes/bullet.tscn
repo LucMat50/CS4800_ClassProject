@@ -4,7 +4,10 @@
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_h1aey"]
 
-[node name="Bullet" type="Node2D" unique_id=422759261]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mkf8s"]
+size = Vector2(1.2000003, 1.1000004)
+
+[node name="Bullet" type="Node2D" unique_id=422759261 groups=["Bullet"]]
 scale = Vector2(5, 5)
 script = ExtResource("1_mkf8s")
 
@@ -12,7 +15,16 @@ script = ExtResource("1_mkf8s")
 self_modulate = Color(0.83137256, 0.23137255, 0.18431373, 1)
 texture = SubResource("CanvasTexture_h1aey")
 
+[node name="Area2D" type="Area2D" parent="Sprite2D" unique_id=350305351]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/Area2D" unique_id=594706964]
+position = Vector2(5.9604632e-09, 4.7683704e-07)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_mkf8s")
+
 [node name="DistanceTimeout" type="Timer" parent="." unique_id=1378526167]
 wait_time = 10.0
 one_shot = true
 autostart = true
+
+[connection signal="body_entered" from="Sprite2D/Area2D" to="." method="_on_area_2d_body_entered"]
