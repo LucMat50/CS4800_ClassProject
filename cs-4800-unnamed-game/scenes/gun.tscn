@@ -9,6 +9,7 @@ script = ExtResource("1_x77fm")
 [node name="RotationOffset" type="Node2D" parent="." unique_id=59003780]
 
 [node name="Sprite2D" type="Sprite2D" parent="RotationOffset" unique_id=719570247]
+self_modulate = Color(0, 0.8, 0.84313726, 1)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("2_og67c")
 
