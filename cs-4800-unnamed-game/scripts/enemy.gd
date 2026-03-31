@@ -1,4 +1,4 @@
-class_name Enemy extends CharacterBody2D
+extends CharacterBody2D
 
 # NORMAL VARIABLES
 var chase = true

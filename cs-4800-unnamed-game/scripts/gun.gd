@@ -13,9 +13,9 @@ var can_shoot = true
 
 func shoot():
 	var new_bullet = bullet.instantiate()
-	get_parent().add_child(new_bullet)
+	get_tree().root.add_child(new_bullet)
 	new_bullet.global_position = shootPos.global_position
-	new_bullet.rotation = rotation
+	new_bullet.global_rotation = shootPos.global_rotation
 	
 func _on_shoot_timer_timeout() -> void:
 	can_shoot = true
