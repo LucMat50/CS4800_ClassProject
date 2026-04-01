@@ -11,18 +11,17 @@ const SPEED = 300
 @onready var player_node: CharacterBody2D = get_parent().get_node("Player")
 
 func _physics_process(delta: float) -> void:
-	position += (player_node.global_position - global_position) / 50
 	direction = (player_node.global_position - global_position).normalized()
 	velocity = lerp(velocity, direction * SPEED, 8.5 * delta)
-	look_at(player_node.global_position)
 	
-	rotation_degrees = wrap(rotation_degrees, 0, 360)
-	if rotation_degrees > 90 and rotation_degrees < 270:
-		scale.y = -1
-	else:
-		scale.y = 1
+	move_and_slide()
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	if body.is_in_group("Player"):
+		body.hurt()
 	
-	move_and_collide(motion)
+func die():
+	queue_free()
 
 #func _on_area_2d_body_entered(body: Node2D) -> void:
 #	if body == player_node:
