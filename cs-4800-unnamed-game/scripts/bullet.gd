@@ -12,7 +12,7 @@ var movement_vector = Vector2(0, -1)
 
 func _physics_process(delta: float) -> void:
 	global_position += Vector2(1, 0).rotated(rotation) * SPEED * delta
-	#position += transform.x * SPEED * delta
+	position += transform.x * SPEED * delta
 	ray.target_position = Vector2((SPEED * delta) + 10, 0)
 	ray.force_raycast_update()
 	
