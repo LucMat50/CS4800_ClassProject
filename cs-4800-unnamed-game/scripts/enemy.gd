@@ -1,36 +1,44 @@
 extends CharacterBody2D
 
-# NORMAL VARIABLES
-var motion = Vector2()
-var direction
+signal died
 
-# CONSTANT VARIABLES
+var direction: Vector2
+var player_node: CharacterBody2D = null
+var is_dead: bool = false
+
 const SPEED = 300
 
-# ONREADY VARIABLES
-@onready var player_node: CharacterBody2D = get_parent().get_node("Player")
+func _ready() -> void:
+	add_to_group("Enemy")
+
+	if player_node == null:
+		player_node = get_tree().get_first_node_in_group("Player") as CharacterBody2D
+
+func set_target(target: CharacterBody2D) -> void:
+	player_node = target
 
 func _physics_process(delta: float) -> void:
+	if is_dead:
+		return
+
+	if player_node == null:
+		return
+
 	direction = (player_node.global_position - global_position).normalized()
-	velocity = lerp(velocity, direction * SPEED, 8.5 * delta)
-	
+	velocity = velocity.lerp(direction * SPEED, 8.5 * delta)
 	move_and_slide()
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group("Player"):
-		body.hurt()
-	
-func die():
+	if is_dead:
+		return
+
+	if body.is_in_group("Player") and body.has_method("take_damage"):
+		body.take_damage(1)
+
+func die() -> void:
+	if is_dead:
+		return
+
+	is_dead = true
+	died.emit()
 	queue_free()
-
-#func _on_area_2d_body_entered(body: Node2D) -> void:
-#	if body == player_node:
-#		get_tree().call_deferred("reload_current_scene")
-
-#func _on_enter_area_body_entered(body: Node2D) -> void:
-#	if body == player_node:
-#		chase = true
-
-#func _on_exit_area_body_exited(body: Node2D) -> void:
-#	if body == player_node:
-#		chase = false

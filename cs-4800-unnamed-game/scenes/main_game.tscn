@@ -2,11 +2,59 @@
 
 [ext_resource type="PackedScene" uid="uid://csfw7flfpvysv" path="res://scenes/player.tscn" id="1_s3esy"]
 [ext_resource type="PackedScene" uid="uid://ctgmbhkunt0my" path="res://scenes/enemy.tscn" id="2_72e8q"]
+[ext_resource type="Script" uid="uid://cy0dgujwfw8qh" path="res://scripts/GameManager.gd" id="3_d2op2"]
+[ext_resource type="Script" uid="uid://bp7fksunth0be" path="res://scripts/HUD.gd" id="4_0rdsr"]
 
 [node name="main_game" type="Node2D" unique_id=2068060570]
 
 [node name="Player" parent="." unique_id=835060394 instance=ExtResource("1_s3esy")]
-position = Vector2(580, 318)
+position = Vector2(538, 333)
 
 [node name="Enemy" parent="." unique_id=407558397 instance=ExtResource("2_72e8q")]
 position = Vector2(272, 243)
+
+[node name="Enemies" type="Node2D" parent="." unique_id=1562430419]
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=425181293]
+
+[node name="Marker2D" type="Marker2D" parent="SpawnPoints" unique_id=476482549]
+position = Vector2(41, 47)
+
+[node name="Marker2D2" type="Marker2D" parent="SpawnPoints" unique_id=1678983498]
+position = Vector2(1120, 620)
+
+[node name="Marker2D3" type="Marker2D" parent="SpawnPoints" unique_id=347009433]
+position = Vector2(44, 604)
+
+[node name="Marker2D4" type="Marker2D" parent="SpawnPoints" unique_id=1759573020]
+position = Vector2(1097, 57)
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1715156630]
+script = ExtResource("4_0rdsr")
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD" unique_id=308466452]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/MarginContainer" unique_id=2075153227]
+layout_mode = 2
+
+[node name="HealthLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=2095534835]
+layout_mode = 2
+text = "Health: 5/5"
+
+[node name="ScoreLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=1702839532]
+layout_mode = 2
+text = "Score: 0"
+
+[node name="WaveLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=1701518]
+layout_mode = 2
+text = "Wave: 1"
+
+[node name="GameOverLabel" type="Label" parent="HUD" unique_id=138031964]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "GAME OVER"
+
+[node name="GameManager" type="Node" parent="." unique_id=712264874]
+script = ExtResource("3_d2op2")
