@@ -4,19 +4,20 @@
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_h1aey"]
 
-[node name="Bullet" type="Node2D" unique_id=422759261 groups=["Bullet"]]
+[node name="Bullet" type="Node2D" unique_id=1345282756 groups=["Bullet"]]
 script = ExtResource("1_mkf8s")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1438513031]
 self_modulate = Color(0.83137256, 0.23137255, 0.18431373, 1)
-position = Vector2(0.54999995, 0)
 scale = Vector2(3, 3)
 texture = SubResource("CanvasTexture_h1aey")
 
 [node name="RayCast2D" type="RayCast2D" parent="." unique_id=1217705019]
 scale = Vector2(0.99999976, 0.99999976)
 target_position = Vector2(20, 0)
+collision_mask = 2
 hit_from_inside = true
+collide_with_areas = true
 
 [node name="DistanceTimeout" type="Timer" parent="." unique_id=1378526167]
 wait_time = 10.0

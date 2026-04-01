@@ -8,17 +8,7 @@ var time_between = 0.1
 var can_shoot = true
 
 # ONREADY VARIABLES
-@onready var gun = $RotationOffset/Sprite2D
 @onready var shootPos = $RotationOffset/ShootPosition
-
-func shoot():
-	var new_bullet = bullet.instantiate()
-	get_tree().root.add_child(new_bullet)
-	new_bullet.global_position = shootPos.global_position
-	new_bullet.global_rotation = shootPos.global_rotation
-	
-func _on_shoot_timer_timeout() -> void:
-	can_shoot = true
 
 func _ready() -> void:
 	$ShootTimer.wait_time = time_between
@@ -36,3 +26,12 @@ func _process(_delta: float) -> void:
 		shoot()
 		can_shoot = false
 		$ShootTimer.start()
+
+func shoot():
+	var new_bullet = bullet.instantiate()
+	get_tree().root.add_child(new_bullet)
+	new_bullet.global_position = shootPos.global_position
+	new_bullet.global_rotation = shootPos.global_rotation
+	
+func _on_shoot_timer_timeout() -> void:
+	can_shoot = true
