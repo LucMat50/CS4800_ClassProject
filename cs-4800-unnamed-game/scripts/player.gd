@@ -30,6 +30,9 @@ func direction():
 	elif velocity.x > 0:
 		right_left = "right"
 
+func hurt():
+	animate.play("hurt")
+
 func animations():
 	if right_left == "left":
 		$Character.flip_h = false

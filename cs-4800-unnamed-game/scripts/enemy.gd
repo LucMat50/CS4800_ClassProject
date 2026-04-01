@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 # NORMAL VARIABLES
-var chase = true
+var motion = Vector2()
 var direction
 
 # CONSTANT VARIABLES
@@ -11,10 +11,17 @@ const SPEED = 300
 @onready var player_node: CharacterBody2D = get_parent().get_node("Player")
 
 func _physics_process(delta: float) -> void:
-	if chase:
-		direction = (player_node.global_position - global_position).normalized()
-		velocity = lerp(velocity, direction * SPEED, 8.5 * delta)
-		move_and_slide()
+	direction = (player_node.global_position - global_position).normalized()
+	velocity = lerp(velocity, direction * SPEED, 8.5 * delta)
+	
+	move_and_slide()
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	if body.is_in_group("Player"):
+		body.hurt()
+	
+func die():
+	queue_free()
 
 #func _on_area_2d_body_entered(body: Node2D) -> void:
 #	if body == player_node:
