@@ -3,6 +3,8 @@ extends CharacterBody2D
 # NORMAL VARIABLES
 var input_direction
 var right_left = "right"
+var hit = false
+var dead = false
 
 # CONSTANT VARIABLES
 const SPEED = 450
@@ -10,7 +12,7 @@ const RUN_SPEED = 600
 
 # ONREADY VARAIBLES
 @onready var shooter = $Shooter
-@onready var animate = $Character
+@onready var animate = $Character/AnimationPlayer
 
 # SCENES
 
@@ -31,19 +33,39 @@ func direction():
 		right_left = "right"
 
 func hurt():
-	animate.play("hurt")
+	GameManager.health -= 1
+	print(GameManager.health)
+	hit = true
+	if GameManager.health == 0:
+		print("Ded")
+		death()
+
+func death():
+	dead = true
+	self.set_process_input(false)
+	self.set_physics_process(false)
+	animate.play("death")
 
 func animations():
 	if right_left == "left":
 		$Character.flip_h = false
 	else:
 		$Character.flip_h = true
+	
+	if !dead and !hit:
+		if velocity.x == 0 and velocity.y == 0:
+			animate.play("default")
+		elif velocity.x != 0 or velocity.y != 0:
+			animate.play("run")
+			
+	elif !dead and hit:
+		animate.play("hurt")
+		await get_tree().create_timer(1).timeout
+		hit = false
 		
-	if velocity.x == 0 and velocity.y == 0:
-		animate.play("default")
-		
-	elif velocity.x != 0 or velocity.y != 0:
-		animate.play("walk_run")
+
+func _ready():
+	GameManager.player = self
 
 func _physics_process(_delta: float) -> void:
 	direction()
