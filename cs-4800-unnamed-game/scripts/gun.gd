@@ -26,6 +26,10 @@ func _process(_delta: float) -> void:
 		shoot()
 		can_shoot = false
 		$ShootTimer.start()
+	
+	if GameManager.player.dead == true:
+		self.set_process_input(false)
+		self.set_physics_process(false)
 
 func shoot():
 	var new_bullet = bullet.instantiate()

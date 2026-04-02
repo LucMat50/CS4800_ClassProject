@@ -60,7 +60,11 @@ func animations():
 			
 	elif !dead and hit:
 		animate.play("hurt")
+		self.set_process_input(false)
+		self.set_physics_process(false)
 		await get_tree().create_timer(1).timeout
+		self.set_process_input(true)
+		self.set_physics_process(true)
 		hit = false
 		
 
