@@ -67,7 +67,6 @@ func animations():
 		self.set_physics_process(true)
 		hit = false
 		
-
 func _ready():
 	GameManager.player = self
 
