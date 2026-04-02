@@ -8,6 +8,11 @@ var right_left: String = "right"
 var current_health: int
 var is_dead: bool = false
 var is_invulnerable: bool = false
+# NORMAL VARIABLES
+var input_direction
+var right_left = "right"
+var hit = false
+var dead = false
 
 const SPEED = 450
 const RUN_SPEED = 600
@@ -15,6 +20,9 @@ const MAX_HEALTH = 5
 const INVULNERABILITY_TIME = 0.6
 
 @onready var animate = $Character
+# ONREADY VARAIBLES
+@onready var shooter = $Shooter
+@onready var animate = $Character/AnimationPlayer
 
 func _ready() -> void:
 	add_to_group("Player")
@@ -78,6 +86,19 @@ func die() -> void:
 func animations() -> void:
 	if is_dead:
 		return
+func hurt():
+	GameManager.health -= 1
+	print(GameManager.health)
+	hit = true
+	if GameManager.health == 0:
+		print("Ded")
+		death()
+
+func death():
+	dead = true
+	self.set_process_input(false)
+	self.set_physics_process(false)
+	animate.play("death")
 
 	if right_left == "left":
 		$Character.flip_h = false
@@ -88,6 +109,24 @@ func animations() -> void:
 		animate.play("default")
 	else:
 		animate.play("walk_run")
+	
+	if !dead and !hit:
+		if velocity.x == 0 and velocity.y == 0:
+			animate.play("default")
+		elif velocity.x != 0 or velocity.y != 0:
+			animate.play("run")
+			
+	elif !dead and hit:
+		animate.play("hurt")
+		self.set_process_input(false)
+		self.set_physics_process(false)
+		await get_tree().create_timer(1).timeout
+		self.set_process_input(true)
+		self.set_physics_process(true)
+		hit = false
+		
+func _ready():
+	GameManager.player = self
 
 func _physics_process(_delta: float) -> void:
 	get_input()

@@ -207,3 +207,8 @@ func update_hud() -> void:
 
 func update_hud_runtime() -> void:
 	pass
+# NORMAL VARIABLES
+var player: CharacterBody2D = null
+var health: int = 5
+var total_waves: int = 30
+var current_wave: int = 1
