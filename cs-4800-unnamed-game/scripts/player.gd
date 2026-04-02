@@ -3,26 +3,21 @@ extends CharacterBody2D
 signal health_changed(current_health: int, max_health: int)
 signal died
 
+# VARIABLES
 var input_direction: Vector2
 var right_left: String = "right"
 var current_health: int
 var is_dead: bool = false
 var is_invulnerable: bool = false
-# NORMAL VARIABLES
-var input_direction
-var right_left = "right"
-var hit = false
-var dead = false
 
+# CONSTANTS
 const SPEED = 450
 const RUN_SPEED = 600
 const MAX_HEALTH = 5
 const INVULNERABILITY_TIME = 0.6
 
+# ONREADY
 @onready var animate = $Character
-# ONREADY VARAIBLES
-@onready var shooter = $Shooter
-@onready var animate = $Character/AnimationPlayer
 
 func _ready() -> void:
 	add_to_group("Player")
@@ -47,9 +42,6 @@ func direction() -> void:
 	elif velocity.x > 0:
 		right_left = "right"
 
-func hurt() -> void:
-	take_damage(1)
-
 func take_damage(amount: int = 1) -> void:
 	if is_dead or is_invulnerable:
 		return
@@ -57,10 +49,6 @@ func take_damage(amount: int = 1) -> void:
 	current_health -= amount
 	current_health = max(current_health, 0)
 	health_changed.emit(current_health, MAX_HEALTH)
-
-	var game_manager = get_tree().current_scene.get_node_or_null("GameManager")
-	if game_manager != null and game_manager.has_method("register_player_damage"):
-		game_manager.register_player_damage(amount)
 
 	if current_health <= 0:
 		die()
@@ -78,7 +66,6 @@ func die() -> void:
 		return
 
 	is_dead = true
-	is_invulnerable = true
 	velocity = Vector2.ZERO
 	animate.play("death")
 	died.emit()
@@ -86,19 +73,6 @@ func die() -> void:
 func animations() -> void:
 	if is_dead:
 		return
-func hurt():
-	GameManager.health -= 1
-	print(GameManager.health)
-	hit = true
-	if GameManager.health == 0:
-		print("Ded")
-		death()
-
-func death():
-	dead = true
-	self.set_process_input(false)
-	self.set_physics_process(false)
-	animate.play("death")
 
 	if right_left == "left":
 		$Character.flip_h = false
@@ -109,24 +83,6 @@ func death():
 		animate.play("default")
 	else:
 		animate.play("walk_run")
-	
-	if !dead and !hit:
-		if velocity.x == 0 and velocity.y == 0:
-			animate.play("default")
-		elif velocity.x != 0 or velocity.y != 0:
-			animate.play("run")
-			
-	elif !dead and hit:
-		animate.play("hurt")
-		self.set_process_input(false)
-		self.set_physics_process(false)
-		await get_tree().create_timer(1).timeout
-		self.set_process_input(true)
-		self.set_physics_process(true)
-		hit = false
-		
-func _ready():
-	GameManager.player = self
 
 func _physics_process(_delta: float) -> void:
 	get_input()

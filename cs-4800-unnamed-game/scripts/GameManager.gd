@@ -25,7 +25,7 @@ var time_alive: float = 0.0
 var current_encounter_name: String = "Balanced"
 var current_ai_state: String = "Normal"
 
-@onready var main = get_parent()
+@onready var main = get_tree().current_scene
 @onready var player = main.get_node("Player")
 @onready var enemy_container = main.get_node("Enemies")
 @onready var spawn_points_parent = main.get_node("SpawnPoints")
@@ -207,8 +207,3 @@ func update_hud() -> void:
 
 func update_hud_runtime() -> void:
 	pass
-# NORMAL VARIABLES
-var player: CharacterBody2D = null
-var health: int = 5
-var total_waves: int = 30
-var current_wave: int = 1
