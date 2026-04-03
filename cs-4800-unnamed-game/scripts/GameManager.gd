@@ -178,7 +178,7 @@ func _on_player_died() -> void:
 	hud.show_game_over()
 	print_run_summary()
 	await get_tree().create_timer(1.5).timeout
-	get_tree().reload_current_scene()
+	get_tree().call_deferred("reload_current_scene")
 
 func start_boss() -> void:
 	boss_started = true
