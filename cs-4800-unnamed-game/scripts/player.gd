@@ -17,7 +17,7 @@ const MAX_HEALTH = 5
 const INVULNERABILITY_TIME = 0.6
 
 # ONREADY
-@onready var animate = $Character
+@onready var animate = $Character/AnimationPlayer
 
 func _ready() -> void:
 	add_to_group("Player")
@@ -55,8 +55,12 @@ func take_damage(amount: int = 1) -> void:
 		return
 
 	is_invulnerable = true
+	self.set_process_input(false)
+	self.set_physics_process(false)
 	animate.play("hurt")
 	await get_tree().create_timer(INVULNERABILITY_TIME).timeout
+	self.set_process_input(true)
+	self.set_physics_process(true)
 
 	if not is_dead:
 		is_invulnerable = false
@@ -71,18 +75,16 @@ func die() -> void:
 	died.emit()
 
 func animations() -> void:
-	if is_dead:
-		return
+	if !is_dead and !is_invulnerable:
+		if right_left == "left":
+			$Character.flip_h = false
+		else:
+			$Character.flip_h = true
 
-	if right_left == "left":
-		$Character.flip_h = false
-	else:
-		$Character.flip_h = true
-
-	if velocity == Vector2.ZERO:
-		animate.play("default")
-	else:
-		animate.play("walk_run")
+		if velocity == Vector2.ZERO:
+			animate.play("default")
+		else:
+			animate.play("run")
 
 func _physics_process(_delta: float) -> void:
 	get_input()
