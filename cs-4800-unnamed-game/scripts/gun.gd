@@ -13,6 +13,11 @@ func _ready() -> void:
 	shoot_timer.wait_time = time_between
 
 func _process(_delta: float) -> void:
+	var player = get_parent()
+
+	if player != null and player.is_dead:
+		return
+
 	look_at(get_global_mouse_position())
 
 	rotation_degrees = wrap(rotation_degrees, 0.0, 360.0)
@@ -25,19 +30,6 @@ func _process(_delta: float) -> void:
 		shoot()
 		can_shoot = false
 		shoot_timer.start()
-	if GameManager.player.dead == false:
-		look_at(get_global_mouse_position())
-		
-		rotation_degrees = wrap(rotation_degrees, 0, 360)
-		if rotation_degrees > 90 and rotation_degrees < 270:
-			scale.y = -1
-		else:
-			scale.y = 1
-	
-		if Input.is_action_just_pressed("shoot") and can_shoot:
-			shoot()
-			can_shoot = false
-			$ShootTimer.start()
 
 func shoot() -> void:
 	var new_bullet = BULLET_SCENE.instantiate()

@@ -17,16 +17,16 @@ position = Vector2(272, 243)
 
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=425181293]
 
-[node name="Marker2D" type="Marker2D" parent="SpawnPoints" unique_id=476482549]
+[node name="Spawn1" type="Marker2D" parent="SpawnPoints" unique_id=476482549]
 position = Vector2(41, 47)
 
-[node name="Marker2D2" type="Marker2D" parent="SpawnPoints" unique_id=1678983498]
+[node name="Spawn2" type="Marker2D" parent="SpawnPoints" unique_id=1678983498]
 position = Vector2(1120, 620)
 
-[node name="Marker2D3" type="Marker2D" parent="SpawnPoints" unique_id=347009433]
+[node name="Spawn3" type="Marker2D" parent="SpawnPoints" unique_id=347009433]
 position = Vector2(44, 604)
 
-[node name="Marker2D4" type="Marker2D" parent="SpawnPoints" unique_id=1759573020]
+[node name="Spawn4" type="Marker2D" parent="SpawnPoints" unique_id=1759573020]
 position = Vector2(1097, 57)
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=1715156630]
