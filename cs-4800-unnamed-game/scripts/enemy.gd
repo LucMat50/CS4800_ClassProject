@@ -42,3 +42,10 @@ func die() -> void:
 	is_dead = true
 	died.emit()
 	queue_free()
+	PlayerStats.add_experience(25)
+	
+	# Coin has a 40% chance to drop
+	if randf() < 0.4:
+		PlayerStats.add_coins(1)
+	
+	queue_free()
