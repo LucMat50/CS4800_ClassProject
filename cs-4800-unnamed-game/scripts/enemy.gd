@@ -9,7 +9,7 @@ var player_node: CharacterBody2D = null
 var is_dead: bool = false
 
 # ONREADY VARIABLES
-@onready var animate = $Sprite2D
+@onready var animate = $Sprite2D/AnimationPlayer
 
 # CONSTANTS
 const SPEED = 300
@@ -42,18 +42,20 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if is_dead:
-		return
-
 	if body.is_in_group("Player") and body.has_method("take_damage"):
 		body.take_damage(1)
+		die()
 
 func die() -> void:
-	if is_dead:
-		animate.play("death")
-		return
-
 	is_dead = true
 	died.emit()
-	await get_tree().create_timer(0.7).timeout
-	queue_free()
+	animate.play("death")
+	#queue_free()
+
+func animations():
+	if !is_dead:
+		animate.play("chase")
+
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	if anim_name == "death":
+		queue_free()

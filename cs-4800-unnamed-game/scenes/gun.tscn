@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dkkeqrvxuail1"]
 
 [ext_resource type="Script" uid="uid://bb4n3buw7rail" path="res://scripts/gun.gd" id="1_x77fm"]
-[ext_resource type="Texture2D" uid="uid://buvdiho0ukvdx" path="res://icon.svg" id="2_og67c"]
+[ext_resource type="Texture2D" uid="uid://dkv7hvtn2kro0" path="res://assets/Gun1.png" id="2_og67c"]
 
 [node name="Gun" type="Node2D" unique_id=1052325760]
 script = ExtResource("1_x77fm")
@@ -9,8 +9,7 @@ script = ExtResource("1_x77fm")
 [node name="RotationOffset" type="Node2D" parent="." unique_id=59003780]
 
 [node name="Sprite2D" type="Sprite2D" parent="RotationOffset" unique_id=719570247]
-self_modulate = Color(0, 0.8, 0.84313726, 1)
-scale = Vector2(0.3, 0.3)
+scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_og67c")
 
 [node name="ShootPosition" type="Marker2D" parent="RotationOffset" unique_id=971378948]
