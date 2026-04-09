@@ -78,8 +78,10 @@ func animations() -> void:
 	if !is_dead and !is_invulnerable:
 		if right_left == "left":
 			$Character.flip_h = false
+			$Gun.position = Vector2(-36, -2)
 		else:
 			$Character.flip_h = true
+			$Gun.position = Vector2(36, 2)
 
 		if velocity == Vector2.ZERO:
 			animate.play("default")
