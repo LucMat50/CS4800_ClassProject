@@ -42,15 +42,20 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
+	if is_dead:
+		return
+	
 	if body.is_in_group("Player") and body.has_method("take_damage"):
 		body.take_damage(1)
 		die()
 
 func die() -> void:
+	if is_dead:
+		return
+	
 	is_dead = true
 	died.emit()
 	animate.play("death")
-	#queue_free()
 
 func animations():
 	if !is_dead:
