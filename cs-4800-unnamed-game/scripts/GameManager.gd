@@ -1,6 +1,7 @@
 extends Node
 
-const ENEMY_SCENE = preload("res://scenes/enemy.tscn")
+const ENEMY_QUICK = preload("res://scenes/enemyquick.tscn")
+const ENEMY_TANK  = preload("res://scenes/enemytank.tscn")
 
 @export var time_between_spawns: float = 0.6
 @export var time_between_waves: float = 2.0
@@ -30,6 +31,7 @@ var current_ai_state: String = "Normal"
 @onready var enemy_container = main.get_node("Enemies")
 @onready var spawn_points_parent = main.get_node("SpawnPoints")
 @onready var hud = main.get_node("HUD")
+
 
 var spawn_points: Array[Marker2D] = []
 
@@ -94,7 +96,17 @@ func spawn_wave() -> void:
 		await get_tree().create_timer(time_between_spawns).timeout
 
 func spawn_enemy() -> void:
-	var enemy = ENEMY_SCENE.instantiate()
+	var enemy_scene
+	var skill = get_skill_score()
+
+	if skill < 3.0:
+		enemy_scene = ENEMY_QUICK
+	elif skill < 8.0:
+		enemy_scene = ENEMY_QUICK if randf() < 0.7 else ENEMY_TANK
+	else:
+		enemy_scene = ENEMY_QUICK if randf() < 0.5 else ENEMY_TANK
+
+	var enemy = enemy_scene.instantiate()
 	var spawn_point = spawn_points[randi() % spawn_points.size()]
 
 	enemy.global_position = spawn_point.global_position
@@ -108,6 +120,7 @@ func spawn_enemy() -> void:
 
 	enemies_spawned_this_wave += 1
 	enemies_alive += 1
+	print(enemy_scene.resource_path)
 
 func choose_encounter_type() -> void:
 	var encounter_type := randi() % 3
@@ -129,7 +142,18 @@ func get_accuracy() -> float:
 	return float(shots_hit) / float(shots_fired)
 
 func get_skill_score() -> float:
-	return (get_accuracy() * 10.0) + (time_alive * 0.05) - (damage_taken * 1.25)
+	if shots_fired == 0:
+		return 0.0
+	
+	var accuracy = float(shots_hit) / shots_fired
+	
+	# Normalize score so it doesn't dominate (tune divisor later)
+	var normalized_score = float(score) / 100.0
+	
+	return (accuracy * 5.0) \
+		+ (time_alive * 0.02) \
+		+ (normalized_score * 1.5) \
+		- (damage_taken * 0.5)
 
 func get_difficulty_multiplier() -> float:
 	var skill := get_skill_score()
@@ -175,10 +199,9 @@ func _on_player_died() -> void:
 		return
 
 	game_over = true
-	hud.show_game_over()
+	hud.show_game_over(wave - 1, score, get_accuracy())
 	print_run_summary()
-	await get_tree().create_timer(1.5).timeout
-	get_tree().call_deferred("reload_current_scene")
+
 
 func start_boss() -> void:
 	boss_started = true
@@ -207,3 +230,4 @@ func update_hud() -> void:
 
 func update_hud_runtime() -> void:
 	pass
+	
