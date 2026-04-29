@@ -95,8 +95,3 @@ text = "Quit"
 
 [node name="GameManager" type="Node" parent="." unique_id=712264874]
 script = ExtResource("3_d2op2")
-time_between_spawns = null
-time_between_waves = null
-base_enemies_per_wave = null
-additional_enemies_per_wave = null
-boss_wave = null

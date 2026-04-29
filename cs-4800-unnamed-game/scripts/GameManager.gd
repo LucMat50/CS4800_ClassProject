@@ -27,10 +27,10 @@ var current_encounter_name: String = "Balanced"
 var current_ai_state: String = "Normal"
 
 @onready var main = get_tree().current_scene
-@onready var player = main.get_node("Player")
-@onready var enemy_container = main.get_node("Enemies")
-@onready var spawn_points_parent = main.get_node("SpawnPoints")
-@onready var hud = main.get_node("HUD")
+@onready var player = null
+@onready var enemy_container = null
+@onready var spawn_points_parent = null
+@onready var hud = null
 
 
 var spawn_points: Array[Marker2D] = []

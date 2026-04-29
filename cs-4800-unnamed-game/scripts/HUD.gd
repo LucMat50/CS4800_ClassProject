@@ -11,6 +11,7 @@ extends CanvasLayer
 @onready var quit_button = $CenterContainer/VBoxContainer/QuitButton
 
 func _ready() -> void:
+	GameManager.hud = self
 	process_mode = Node.PROCESS_MODE_ALWAYS  # important for buttons when paused
 
 	if game_over_label != null:
