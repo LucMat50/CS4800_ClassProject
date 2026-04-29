@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://ctgmbhkunt0my" path="res://scenes/enemyquick.tscn" id="1_ipu61"]
 [ext_resource type="PackedScene" uid="uid://csfw7flfpvysv" path="res://scenes/player.tscn" id="1_s3esy"]
 [ext_resource type="PackedScene" uid="uid://dwyuhcgaey2yg" path="res://scenes/enemytank.tscn" id="2_ygxny"]
-[ext_resource type="Script" uid="uid://bl0g8hv13mald" path="res://scripts/main_game.gd" id="3_d2op2"]
+[ext_resource type="Script" path="res://scripts/main_game.gd" id="3_d2op2"]
 [ext_resource type="Script" uid="uid://bp7fksunth0be" path="res://scripts/HUD.gd" id="4_0rdsr"]
 [ext_resource type="Script" uid="uid://cy0dgujwfw8qh" path="res://scripts/GameManager.gd" id="6_ygxny"]
 
