@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://bxch6yuqrajte"]
+[gd_scene format=3 uid="uid://ctgmbhkunt0my"]
 
 [ext_resource type="Script" uid="uid://268n0eqk6o8m" path="res://scripts/enemy.gd" id="1_md0e3"]
 [ext_resource type="Texture2D" uid="uid://1d8msmun3mj2" path="res://assets/Enemy1.png" id="2_md0e3"]
@@ -182,6 +182,8 @@ radius = 23.345236
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_md0e3")
+speed = 200.0
+max_health = 1
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="." unique_id=408305935]
 scale = Vector2(2, 2)

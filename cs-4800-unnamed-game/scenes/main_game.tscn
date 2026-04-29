@@ -1,17 +1,21 @@
 [gd_scene format=3 uid="uid://1it2yvfv8pqt"]
 
+[ext_resource type="PackedScene" uid="uid://ctgmbhkunt0my" path="res://scenes/enemyquick.tscn" id="1_ipu61"]
 [ext_resource type="PackedScene" uid="uid://csfw7flfpvysv" path="res://scenes/player.tscn" id="1_s3esy"]
-[ext_resource type="PackedScene" uid="uid://ctgmbhkunt0my" path="res://scenes/enemy.tscn" id="2_72e8q"]
-[ext_resource type="Script" uid="uid://cy0dgujwfw8qh" path="res://scripts/GameManager.gd" id="3_d2op2"]
-[ext_resource type="Script" path="res://scripts/HUD.gd" id="4_0rdsr"]
+[ext_resource type="PackedScene" uid="uid://dwyuhcgaey2yg" path="res://scenes/enemytank.tscn" id="2_ygxny"]
+[ext_resource type="Script" uid="uid://bl0g8hv13mald" path="res://scripts/main_game.gd" id="3_d2op2"]
+[ext_resource type="Script" uid="uid://bp7fksunth0be" path="res://scripts/HUD.gd" id="4_0rdsr"]
+[ext_resource type="Script" uid="uid://cy0dgujwfw8qh" path="res://scripts/GameManager.gd" id="6_ygxny"]
 
 [node name="main_game" type="Node2D" unique_id=2068060570]
+script = ExtResource("3_d2op2")
+
+[node name="EnemyQuick" parent="." unique_id=407558397 instance=ExtResource("1_ipu61")]
+
+[node name="EnemyTank" parent="." unique_id=567742270 instance=ExtResource("2_ygxny")]
 
 [node name="Player" parent="." unique_id=835060394 instance=ExtResource("1_s3esy")]
 position = Vector2(538, 333)
-
-[node name="Enemy" parent="." unique_id=407558397 instance=ExtResource("2_72e8q")]
-position = Vector2(272, 243)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1562430419]
 
@@ -33,8 +37,8 @@ position = Vector2(1097, 57)
 script = ExtResource("4_0rdsr")
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD" unique_id=308466452]
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 85.0
+offset_bottom = 77.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD/MarginContainer" unique_id=2075153227]
 layout_mode = 2
@@ -51,10 +55,45 @@ text = "Score: 0"
 layout_mode = 2
 text = "Wave: 1"
 
-[node name="GameOverLabel" type="Label" parent="HUD" unique_id=138031964]
-offset_right = 40.0
-offset_bottom = 23.0
+[node name="CenterContainer" type="CenterContainer" parent="HUD" unique_id=787326793]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/CenterContainer" unique_id=65212230]
+layout_mode = 2
+alignment = 1
+
+[node name="GameOverLabel" type="Label" parent="HUD/CenterContainer/VBoxContainer" unique_id=138031964]
+visible = false
+layout_mode = 2
 text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SummaryWaveLabel" type="Label" parent="HUD/CenterContainer/VBoxContainer" unique_id=1617114264]
+visible = false
+layout_mode = 2
+
+[node name="SummaryScoreLabel" type="Label" parent="HUD/CenterContainer/VBoxContainer" unique_id=677504629]
+visible = false
+layout_mode = 2
+
+[node name="SummaryAccuracyLabel" type="Label" parent="HUD/CenterContainer/VBoxContainer" unique_id=1739043830]
+visible = false
+layout_mode = 2
+
+[node name="RestartButton" type="Button" parent="HUD/CenterContainer/VBoxContainer" unique_id=364629728]
+visible = false
+layout_mode = 2
+text = "Restart"
+
+[node name="QuitButton" type="Button" parent="HUD/CenterContainer/VBoxContainer" unique_id=728880137]
+visible = false
+layout_mode = 2
+text = "Quit"
 
 [node name="GameManager" type="Node" parent="." unique_id=712264874]
-script = ExtResource("3_d2op2")
+script = ExtResource("6_ygxny")
