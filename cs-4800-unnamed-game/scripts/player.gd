@@ -20,6 +20,7 @@ const INVULNERABILITY_TIME = 0.6
 @onready var animate = $Character/AnimationPlayer
 
 func _ready() -> void:
+	GameManager.player = self
 	add_to_group("Player")
 	current_health = MAX_HEALTH
 	health_changed.emit(current_health, MAX_HEALTH)
