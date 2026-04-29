@@ -3,6 +3,13 @@
 [ext_resource type="Texture2D" uid="uid://cyb0mdhaun3vm" path="res://assets/finalMenuBg.png" id="1_xsilq"]
 [ext_resource type="FontFile" uid="uid://ddqrwijxyywq" path="res://assets/Slackey-Regular.ttf" id="2_12vek"]
 
+[sub_resource type="GDScript" id="GDScript_xsilq"]
+script/source = "extends Control
+
+func _on_play_pressed() -> void:
+	get_tree().change_scene_to_file(\"res://scenes/main_game.tscn\")
+"
+
 [sub_resource type="Theme" id="Theme_vsw8r"]
 default_font = ExtResource("2_12vek")
 default_font_size = 60
@@ -24,6 +31,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = SubResource("GDScript_xsilq")
 
 [node name="MenuBackground" type="TextureRect" parent="." unique_id=2122387941]
 layout_mode = 0
@@ -44,9 +52,11 @@ offset_right = 425.0
 offset_bottom = -64.0
 grow_vertical = 0
 
-[node name="Button" type="Button" parent="VBoxContainer" unique_id=1064147355]
+[node name="Play" type="Button" parent="VBoxContainer" unique_id=1064147355]
 layout_mode = 2
 theme = SubResource("Theme_vsw8r")
 theme_override_colors/font_color = Color(0.85490197, 0.23137255, 0.34901962, 1)
 theme_override_styles/normal = SubResource("StyleBoxTexture_12vek")
 text = "PLAY"
+
+[connection signal="pressed" from="VBoxContainer/Play" to="." method="_on_play_pressed"]
