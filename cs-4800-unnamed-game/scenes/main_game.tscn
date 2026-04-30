@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dwyuhcgaey2yg" path="res://scenes/enemytank.tscn" id="2_ygxny"]
 [ext_resource type="Script" uid="uid://bl0g8hv13mald" path="res://scripts/main_game.gd" id="3_d2op2"]
 [ext_resource type="Script" uid="uid://bp7fksunth0be" path="res://scripts/HUD.gd" id="4_0rdsr"]
+[ext_resource type="Script" uid="uid://calc50sxiwwtp" path="res://scripts/enemy_rogue.gd" id="4_wi4c7"]
 [ext_resource type="Script" uid="uid://cy0dgujwfw8qh" path="res://scripts/GameManager.gd" id="6_ygxny"]
 
 [node name="main_game" type="Node2D" unique_id=2068060570]
@@ -13,6 +14,15 @@ script = ExtResource("3_d2op2")
 [node name="EnemyQuick" parent="." unique_id=407558397 instance=ExtResource("1_ipu61")]
 
 [node name="EnemyTank" parent="." unique_id=567742270 instance=ExtResource("2_ygxny")]
+
+[node name="EnemyRogue" parent="." unique_id=780259437 instance=ExtResource("2_ygxny")]
+script = ExtResource("4_wi4c7")
+speed = 200.0
+max_health = 1
+damage = 1
+invis_cooldown = 4.0
+invis_duration = 2.5
+reveal_range = 90.0
 
 [node name="Player" parent="." unique_id=835060394 instance=ExtResource("1_s3esy")]
 position = Vector2(538, 333)

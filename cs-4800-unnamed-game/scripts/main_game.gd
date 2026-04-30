@@ -2,6 +2,7 @@ extends Node2D
 
 const ENEMY_QUICK = preload("res://scenes/enemyquick.tscn")
 const ENEMY_TANK  = preload("res://scenes/enemytank.tscn")
+const ENEMY_ROGUE = preload("res://scenes/enemyRogue.tscn")
 
 @export var time_between_spawns: float = 0.6
 @export var time_between_waves: float = 2.0
@@ -18,7 +19,7 @@ var game_over: bool = false
 var waiting_for_next_wave: bool = false
 var boss_started: bool = false
 
-# Hidden adaptive AI tracking
+# Adaptive AI tracking
 var shots_fired: int = 0
 var shots_hit: int = 0
 var damage_taken: int = 0
@@ -32,8 +33,8 @@ var current_ai_state: String = "Normal"
 @onready var spawn_points_parent = main.get_node("SpawnPoints")
 @onready var hud = main.get_node("HUD")
 
-
 var spawn_points: Array[Marker2D] = []
+
 
 func _ready() -> void:
 	randomize()
@@ -43,7 +44,7 @@ func _ready() -> void:
 			spawn_points.append(child)
 
 	if spawn_points.is_empty():
-		push_error("GameManager: No Marker2D spawn points found under SpawnPoints.")
+		push_error("No spawn points found.")
 		return
 
 	if player.has_signal("died"):
@@ -57,12 +58,16 @@ func _ready() -> void:
 	update_hud()
 	start_next_wave()
 
+
 func _process(delta: float) -> void:
 	if game_over:
 		return
-
 	time_alive += delta
-	update_hud_runtime()
+
+
+# =========================
+# WAVE SYSTEM
+# =========================
 
 func start_next_wave() -> void:
 	if game_over:
@@ -77,15 +82,15 @@ func start_next_wave() -> void:
 	enemies_spawned_this_wave = 0
 	enemies_alive = 0
 
-	choose_encounter_type()
-
 	var base_count := base_enemies_per_wave + ((wave - 1) * additional_enemies_per_wave)
-	enemies_to_spawn_this_wave = max(1, int(round(base_count * get_difficulty_multiplier())))
+	var difficulty := get_difficulty_multiplier()
+
+	# Skill → more enemies
+	enemies_to_spawn_this_wave = int(base_count * difficulty + (wave * 0.5))
 
 	update_hud()
-	print("Starting Wave ", wave, " | Enemies: ", enemies_to_spawn_this_wave, " | Encounter: ", current_encounter_name, " | AI: ", current_ai_state)
-
 	spawn_wave()
+
 
 func spawn_wave() -> void:
 	for _i in range(enemies_to_spawn_this_wave):
@@ -93,18 +98,26 @@ func spawn_wave() -> void:
 			return
 
 		spawn_enemy()
-		await get_tree().create_timer(time_between_spawns).timeout
+
+		# Skill → faster spawn
+		var delay = time_between_spawns / get_difficulty_multiplier()
+		await get_tree().create_timer(delay).timeout
+
+
+# =========================
+# ENEMY SPAWN (random types)
+# =========================
 
 func spawn_enemy() -> void:
+	var r = randf()
 	var enemy_scene
-	var skill = get_skill_score()
 
-	if skill < 3.0:
+	if r < 0.6:
 		enemy_scene = ENEMY_QUICK
-	elif skill < 8.0:
-		enemy_scene = ENEMY_QUICK if randf() < 0.7 else ENEMY_TANK
+	elif r < 0.85:
+		enemy_scene = ENEMY_TANK
 	else:
-		enemy_scene = ENEMY_QUICK if randf() < 0.5 else ENEMY_TANK
+		enemy_scene = ENEMY_ROGUE
 
 	var enemy = enemy_scene.instantiate()
 	var spawn_point = spawn_points[randi() % spawn_points.size()]
@@ -118,42 +131,28 @@ func spawn_enemy() -> void:
 	if enemy.has_signal("died"):
 		enemy.died.connect(_on_enemy_died)
 
-	enemies_spawned_this_wave += 1
 	enemies_alive += 1
-	print(enemy_scene.resource_path)
 
-func choose_encounter_type() -> void:
-	var encounter_type := randi() % 3
 
-	match encounter_type:
-		0:
-			current_encounter_name = "Swarm"
-			time_between_spawns = 0.3
-		1:
-			current_encounter_name = "Pressure"
-			time_between_spawns = 0.45
-		_:
-			current_encounter_name = "Balanced"
-			time_between_spawns = 0.6
+# =========================
+# SKILL SYSTEM
+# =========================
 
 func get_accuracy() -> float:
 	if shots_fired == 0:
-		return 0.0
+		return 0.5
 	return float(shots_hit) / float(shots_fired)
 
+
 func get_skill_score() -> float:
-	if shots_fired == 0:
-		return 0.0
-	
-	var accuracy = float(shots_hit) / shots_fired
-	
-	# Normalize score so it doesn't dominate (tune divisor later)
+	var accuracy = get_accuracy()
 	var normalized_score = float(score) / 100.0
-	
+
 	return (accuracy * 5.0) \
 		+ (time_alive * 0.02) \
 		+ (normalized_score * 1.5) \
 		- (damage_taken * 0.5)
+
 
 func get_difficulty_multiplier() -> float:
 	var skill := get_skill_score()
@@ -168,6 +167,11 @@ func get_difficulty_multiplier() -> float:
 		current_ai_state = "Increasing"
 		return 1.3
 
+
+# =========================
+# EVENTS
+# =========================
+
 func register_shot_fired() -> void:
 	shots_fired += 1
 
@@ -181,13 +185,9 @@ func register_player_damage(amount: int = 1) -> void:
 
 func _on_enemy_died() -> void:
 	enemies_alive -= 1
-	update_hud()
 
-	print("Score: ", score, " | Enemies Left: ", enemies_alive)
-
-	if enemies_alive <= 0 and enemies_spawned_this_wave >= enemies_to_spawn_this_wave and not waiting_for_next_wave:
+	if enemies_alive <= 0 and not waiting_for_next_wave:
 		waiting_for_next_wave = true
-		print("Wave ", wave, " cleared.")
 		await get_tree().create_timer(time_between_waves).timeout
 		start_next_wave()
 
@@ -195,39 +195,14 @@ func _on_player_health_changed(current_health: int, max_health: int) -> void:
 	hud.update_health(current_health, max_health)
 
 func _on_player_died() -> void:
-	if game_over:
-		return
-
 	game_over = true
 	hud.show_game_over(wave - 1, score, get_accuracy())
-	print_run_summary()
 
 
 func start_boss() -> void:
 	boss_started = true
-	current_encounter_name = "Boss"
-	current_ai_state = "Counter Strategy"
-	print("Boss Fight Starting")
-	print("For Phase 1, this is a placeholder boss trigger. You can replace it with a boss spawn next.")
 
-func print_run_summary() -> void:
-	print("===== RUN SUMMARY =====")
-	print("Wave Reached: ", wave)
-	print("Score: ", score)
-	print("Shots Fired: ", shots_fired)
-	print("Shots Hit: ", shots_hit)
-	print("Accuracy: ", "%.2f%%" % (get_accuracy() * 100.0))
-	print("Damage Taken: ", damage_taken)
-	print("Time Alive: ", "%.2f" % time_alive, " seconds")
-	print("Skill Score: ", "%.2f" % get_skill_score())
-	print("AI State: ", current_ai_state)
-	print("Encounter: ", current_encounter_name)
-	print("=======================")
 
 func update_hud() -> void:
 	hud.update_score(score)
 	hud.update_wave(wave)
-
-func update_hud_runtime() -> void:
-	pass
-	
