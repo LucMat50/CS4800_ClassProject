@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://bp7fksunth0be" path="res://scripts/HUD.gd" id="4_0rdsr"]
 [ext_resource type="Script" uid="uid://calc50sxiwwtp" path="res://scripts/enemy_rogue.gd" id="4_wi4c7"]
 [ext_resource type="Script" uid="uid://cy0dgujwfw8qh" path="res://scripts/GameManager.gd" id="6_ygxny"]
+[ext_resource type="FontFile" uid="uid://ddqrwijxyywq" path="res://assets/Slackey-Regular.ttf" id="8_2l77h"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_70vka"]
 texture = ExtResource("2_70vka")
@@ -150,14 +151,20 @@ layout_mode = 2
 
 [node name="HealthLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=2095534835]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("8_2l77h")
+theme_override_font_sizes/font_size = 21
 text = "Health: 5/5"
 
 [node name="ScoreLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=1702839532]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("8_2l77h")
+theme_override_font_sizes/font_size = 21
 text = "Score: 0"
 
 [node name="WaveLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=1701518]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("8_2l77h")
+theme_override_font_sizes/font_size = 21
 text = "Wave: 1"
 
 [node name="CenterContainer" type="CenterContainer" parent="HUD" unique_id=787326793]
