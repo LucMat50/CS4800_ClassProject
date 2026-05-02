@@ -326,7 +326,7 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
-size = Vector2(25, 70)
+size = Vector2(25, 19)
 
 [node name="Player" type="CharacterBody2D" unique_id=835060394 groups=["Player"]]
 z_index = 1
@@ -342,7 +342,7 @@ libraries/ = SubResource("AnimationLibrary_qhqgy")
 autoplay = &"default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1602922000]
-position = Vector2(-0.5, 0)
+position = Vector2(-0.5, 25.5)
 shape = SubResource("RectangleShape2D_g2els")
 
 [node name="Gun" parent="." unique_id=1052325760 instance=ExtResource("3_qhqgy")]
