@@ -10,11 +10,20 @@ var current_health: int
 var is_dead: bool = false
 var is_invulnerable: bool = false
 
+# CAMERA VARIABLES
+@onready var cam: Camera2D = $Camera2D
+
+@export var cam_follow_speed: float = 6.0
+@export var cam_lookahead_distance: float = 130.0
+@export var cam_lookahead_smoothing: float = 5.0
+
+var cam_lookahead: Vector2 = Vector2.ZERO
+
 # CONSTANTS
-const SPEED = 450
-const RUN_SPEED = 600
+const SPEED = 300
+const RUN_SPEED = 500
 const MAX_HEALTH = 5
-const INVULNERABILITY_TIME = 0.6
+const INVULNERABILITY_TIME = 0.7
 
 # ONREADY
 @onready var animate = $Character/AnimationPlayer
@@ -89,8 +98,33 @@ func animations() -> void:
 		else:
 			animate.play("run")
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	get_input()
 	direction()
 	animations()
 	move_and_slide()
+
+	update_camera(delta)   # 🔥 CAMERA UPDATE
+
+
+# =========================
+# 🔥 CAMERA SYSTEM
+# =========================
+
+func update_camera(delta: float) -> void:
+	var target_lookahead = Vector2.ZERO
+
+	# 🔥 Movement-based lookahead
+	if velocity.length() > 2:
+		target_lookahead = velocity.normalized() * cam_lookahead_distance
+
+	# 🔥 OPTIONAL: Aim bias (helps with shooting visibility)
+	var mouse_dir = (get_global_mouse_position() - global_position)
+	if mouse_dir.length() > 0:
+		target_lookahead += mouse_dir.normalized() * 40
+
+	# 🔥 Smooth transition
+	cam_lookahead = cam_lookahead.lerp(target_lookahead, delta * cam_lookahead_smoothing)
+
+	# 🔥 Apply offset (relative to player)
+	cam.position = cam.position.lerp(cam_lookahead, delta * cam_follow_speed)

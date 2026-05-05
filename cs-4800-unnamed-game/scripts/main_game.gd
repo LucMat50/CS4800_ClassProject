@@ -2,7 +2,7 @@ extends Node2D
 
 const ENEMY_QUICK = preload("res://scenes/enemyquick.tscn")
 const ENEMY_TANK  = preload("res://scenes/enemytank.tscn")
-const ENEMY_ROGUE = preload("res://scenes/enemyRogue.tscn")
+const ENEMY_ROGUE = preload("res://scenes/enemyrogue.tscn")
 
 @export var time_between_spawns: float = 0.6
 @export var time_between_waves: float = 2.0
