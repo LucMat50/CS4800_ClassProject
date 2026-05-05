@@ -63,6 +63,9 @@ func _process(delta: float) -> void:
 	if game_over:
 		return
 	time_alive += delta
+	
+	if Input.is_action_just_pressed("shoot"):
+		register_shot_fired()
 
 
 # =========================
@@ -133,7 +136,6 @@ func spawn_enemy() -> void:
 
 	enemies_alive += 1
 
-
 # =========================
 # SKILL SYSTEM
 # =========================
@@ -141,7 +143,8 @@ func spawn_enemy() -> void:
 func get_accuracy() -> float:
 	if shots_fired == 0:
 		return 0.5
-	return float(shots_hit) / float(shots_fired)
+	else:
+		return float(shots_hit) / float(shots_fired)
 
 
 func get_skill_score() -> float:
@@ -166,7 +169,6 @@ func get_difficulty_multiplier() -> float:
 	else:
 		current_ai_state = "Increasing"
 		return 1.3
-
 
 # =========================
 # EVENTS

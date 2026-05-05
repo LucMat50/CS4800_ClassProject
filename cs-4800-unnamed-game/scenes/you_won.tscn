@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://ctn313wd0gif3"]
+
+[ext_resource type="FontFile" uid="uid://ddqrwijxyywq" path="res://assets/Slackey-Regular.ttf" id="1_02j60"]
+
+[sub_resource type="Theme" id="Theme_cwwad"]
+default_font = ExtResource("1_02j60")
+default_font_size = 50
+
+[node name="Control" type="Control" unique_id=1518159600]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="." unique_id=159596452]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 218.0
+theme = SubResource("Theme_cwwad")
+theme_override_colors/font_color = Color(0.9098039, 0.28627452, 0.3372549, 1)
+text = "YOU WON"
+horizontal_alignment = 1
+vertical_alignment = 1
