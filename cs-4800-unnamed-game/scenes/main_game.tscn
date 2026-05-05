@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dwyuhcgaey2yg" path="res://scenes/enemytank.tscn" id="2_ygxny"]
 [ext_resource type="Script" uid="uid://bl0g8hv13mald" path="res://scripts/main_game.gd" id="3_d2op2"]
 [ext_resource type="Script" uid="uid://bp7fksunth0be" path="res://scripts/HUD.gd" id="4_0rdsr"]
-[ext_resource type="Script" uid="uid://calc50sxiwwtp" path="res://scripts/enemy_rogue.gd" id="4_wi4c7"]
+[ext_resource type="PackedScene" uid="uid://ddryede34j0ya" path="res://scenes/enemyrogue.tscn" id="5_2l77h"]
 [ext_resource type="Script" uid="uid://cy0dgujwfw8qh" path="res://scripts/GameManager.gd" id="6_ygxny"]
 [ext_resource type="FontFile" uid="uid://ddqrwijxyywq" path="res://assets/Slackey-Regular.ttf" id="8_2l77h"]
 
@@ -143,17 +143,9 @@ physics_quadrant_size = 32
 
 [node name="EnemyQuick" parent="." unique_id=407558397 instance=ExtResource("1_ipu61")]
 
-[node name="EnemyTank" parent="." unique_id=567742270 instance=ExtResource("2_ygxny")]
-speed = 100
+[node name="EnemyTank" parent="." unique_id=244753795 instance=ExtResource("2_ygxny")]
 
-[node name="EnemyRogue" parent="." unique_id=780259437 instance=ExtResource("2_ygxny")]
-script = ExtResource("4_wi4c7")
-speed = 175
-max_health = 1
-damage = 1
-invis_cooldown = 4.0
-invis_duration = 2.5
-reveal_range = 90.0
+[node name="EnemyRogue" parent="." unique_id=463325057 instance=ExtResource("5_2l77h")]
 
 [node name="Player" parent="." unique_id=835060394 instance=ExtResource("1_s3esy")]
 position = Vector2(553, 295)
@@ -182,30 +174,36 @@ position = Vector2(1130, -23)
 script = ExtResource("4_0rdsr")
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD" unique_id=308466452]
-offset_right = 85.0
-offset_bottom = 77.0
-metadata/_edit_lock_ = true
+offset_right = 195.0
+offset_bottom = 145.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD/MarginContainer" unique_id=2075153227]
 layout_mode = 2
+alignment = 1
 
 [node name="HealthLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=2095534835]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_2l77h")
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 25
 text = "Health: 5/5"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="ScoreLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=1702839532]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_2l77h")
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 25
 text = "Score: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="WaveLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=1701518]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_2l77h")
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 25
 text = "Wave: 1"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="HUD" unique_id=787326793]
 anchors_preset = 15

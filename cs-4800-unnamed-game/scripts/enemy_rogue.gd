@@ -22,6 +22,7 @@ var stuck_timer := 0.0
 var last_position: Vector2
 
 @onready var sprite = $Sprite2D
+@onready var animation = $Sprite2D/AnimationPlayer
 @onready var collision = $CollisionShape2D
 @onready var nav_agent: NavigationAgent2D = $NavAgent
 
@@ -149,6 +150,7 @@ func move_along_path():
 	var current_speed = speed * (1.25 if invis_active else 1.0)
 
 	velocity = to_point.normalized() * current_speed
+	chase_animation()
 	move_and_slide()
 
 	if not invis_active:
@@ -210,5 +212,20 @@ func die():
 		return
 
 	is_dead = true
+	animation.play("death")
 	died.emit()
-	queue_free()
+	
+func chase_animation():
+	if !is_dead:
+		animation.play("chase")
+	
+func _on_area_2d_body_entered(body):
+	if is_dead:
+		return
+
+	if body.is_in_group("Player") and body.has_method("take_damage"):
+		body.take_damage(damage)
+		
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	if anim_name == "death":
+		queue_free()

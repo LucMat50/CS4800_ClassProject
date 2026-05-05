@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ddryede34j0ya"]
 
-[ext_resource type="Script" uid="uid://268n0eqk6o8m" path="res://scripts/enemy.gd" id="1_1wjgd"]
+[ext_resource type="Script" uid="uid://calc50sxiwwtp" path="res://scripts/enemy_rogue.gd" id="1_1wjgd"]
 [ext_resource type="Texture2D" uid="uid://b2wl2b56cep2n" path="res://assets/Enemy3.png" id="2_1wjgd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_df76d"]
@@ -189,7 +189,6 @@ radius = 23.345236
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_1wjgd")
-max_health = 1
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="." unique_id=408305935]
 scale = Vector2(2, 2)
