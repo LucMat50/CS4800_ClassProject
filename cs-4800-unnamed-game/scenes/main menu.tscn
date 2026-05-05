@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://cyb0mdhaun3vm" path="res://assets/finalMenuBg.png" id="1_xsilq"]
 [ext_resource type="FontFile" uid="uid://ddqrwijxyywq" path="res://assets/Slackey-Regular.ttf" id="2_12vek"]
+[ext_resource type="StyleBox" uid="uid://bpyd435onm1gx" path="res://ButtonTexture.tres" id="3_12vek"]
 
 [sub_resource type="GDScript" id="GDScript_xsilq"]
 script/source = "extends Control
@@ -13,16 +14,6 @@ func _on_play_pressed() -> void:
 [sub_resource type="Theme" id="Theme_vsw8r"]
 default_font = ExtResource("2_12vek")
 default_font_size = 60
-
-[sub_resource type="CanvasTexture" id="CanvasTexture_xsilq"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_12vek"]
-texture = SubResource("CanvasTexture_xsilq")
-texture_margin_left = 12.0
-texture_margin_top = 12.0
-texture_margin_right = 12.0
-texture_margin_bottom = 12.0
-modulate_color = Color(0.13333334, 0.13333334, 0.36078432, 1)
 
 [node name="Control" type="Control" unique_id=1998115824]
 layout_mode = 3
@@ -56,7 +47,7 @@ grow_vertical = 0
 layout_mode = 2
 theme = SubResource("Theme_vsw8r")
 theme_override_colors/font_color = Color(0.85490197, 0.23137255, 0.34901962, 1)
-theme_override_styles/normal = SubResource("StyleBoxTexture_12vek")
+theme_override_styles/normal = ExtResource("3_12vek")
 text = "PLAY"
 
 [connection signal="pressed" from="VBoxContainer/Play" to="." method="_on_play_pressed"]
