@@ -9,6 +9,7 @@ extends CanvasLayer
 @onready var summary_accuracy_label = $CenterContainer/VBoxContainer/SummaryAccuracyLabel
 @onready var restart_button = $CenterContainer/VBoxContainer/RestartButton
 @onready var quit_button = $CenterContainer/VBoxContainer/QuitButton
+@onready var colorbg = $ColorRect
 
 func _ready() -> void:
 	GameManager.hud = self
@@ -58,6 +59,7 @@ func show_game_over(wave: int, score: int, accuracy: float) -> void:
 
 	restart_button.visible = true
 	quit_button.visible = true
+	colorbg.visible = true
 
 
 func _on_restart_pressed() -> void:
