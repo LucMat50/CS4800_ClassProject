@@ -37,6 +37,7 @@ var last_position: Vector2
 # =========================
 @onready var sprite = $Sprite2D
 @onready var nav_agent: NavigationAgent2D = $NavAgent
+@onready var animation = $Sprite2D/AnimationPlayer
 
 # =========================
 # STATS
@@ -173,7 +174,6 @@ func get_random_nav_point():
 	var offset = Vector2(randf_range(-500, 500), randf_range(-500, 500))
 	return NavigationServer2D.map_get_closest_point(map, global_position + offset)
 
-
 # =========================
 # MOVEMENT
 # =========================
@@ -198,6 +198,7 @@ func move_along_path():
 		return
 
 	velocity = to_point.normalized() * speed
+	chase_animation()
 	move_and_slide()
 
 	sprite.flip_h = velocity.x < 0
@@ -251,15 +252,17 @@ func take_damage(amount):
 	if current_health <= 0:
 		die()
 
-
 func die():
 	if is_dead:
 		return
 
 	is_dead = true
 	died.emit()
-	queue_free()
+	animation.play("death")
 
+func chase_animation():
+	if !is_dead:
+		animation.play("chase")
 
 func _on_area_2d_body_entered(body):
 	if is_dead:
@@ -267,3 +270,7 @@ func _on_area_2d_body_entered(body):
 
 	if body.is_in_group("Player") and body.has_method("take_damage"):
 		body.take_damage(damage)
+
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	if anim_name == "death":
+		queue_free()
