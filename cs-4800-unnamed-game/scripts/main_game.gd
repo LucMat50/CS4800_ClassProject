@@ -178,6 +178,7 @@ func register_shot_fired() -> void:
 func register_shot_hit() -> void:
 	shots_hit += 1
 	score += 10
+	GameManager.score = score
 	update_hud()
 
 func register_player_damage(amount: int = 1) -> void:
@@ -185,7 +186,9 @@ func register_player_damage(amount: int = 1) -> void:
 
 func _on_enemy_died() -> void:
 	enemies_alive -= 1
-
+	
+	register_shot_hit()
+	
 	if enemies_alive <= 0 and not waiting_for_next_wave:
 		waiting_for_next_wave = true
 		await get_tree().create_timer(time_between_waves).timeout
@@ -201,7 +204,6 @@ func _on_player_died() -> void:
 
 func start_boss() -> void:
 	boss_started = true
-
 
 func update_hud() -> void:
 	hud.update_score(score)
