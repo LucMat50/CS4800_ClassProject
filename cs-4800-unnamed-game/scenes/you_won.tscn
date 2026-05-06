@@ -3,6 +3,9 @@
 [ext_resource type="FontFile" uid="uid://ddqrwijxyywq" path="res://assets/Slackey-Regular.ttf" id="1_02j60"]
 [ext_resource type="Script" uid="uid://ojca8mcj7uv2" path="res://scripts/you_won.gd" id="1_tio7n"]
 [ext_resource type="StyleBox" uid="uid://bpyd435onm1gx" path="res://ButtonTexture.tres" id="2_cwwad"]
+[ext_resource type="AudioStream" uid="uid://8k7ol3kx5px3" path="res://sounds/win.mp3" id="4_cfpfi"]
+[ext_resource type="AudioStream" uid="uid://cu35fk3dh5esa" path="res://sounds/buttonSelect.mp3" id="5_tgsk8"]
+[ext_resource type="AudioStream" uid="uid://drxsyyw6vxva6" path="res://sounds/buttonChoose.mp3" id="6_80m04"]
 
 [sub_resource type="Theme" id="Theme_cwwad"]
 default_font = ExtResource("1_02j60")
@@ -68,5 +71,16 @@ theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = ExtResource("2_cwwad")
 text = "Quit"
 
+[node name="Win" type="AudioStreamPlayer2D" parent="." unique_id=181026585]
+stream = ExtResource("4_cfpfi")
+
+[node name="ButtonSelect" type="AudioStreamPlayer2D" parent="." unique_id=1565169269]
+stream = ExtResource("5_tgsk8")
+
+[node name="ButtonChoose" type="AudioStreamPlayer2D" parent="." unique_id=131946866]
+stream = ExtResource("6_80m04")
+
+[connection signal="mouse_entered" from="VBoxContainer/Retry" to="." method="_on_retry_mouse_entered"]
 [connection signal="pressed" from="VBoxContainer/Retry" to="." method="_on_retry_pressed"]
+[connection signal="mouse_entered" from="VBoxContainer/Quit" to="." method="_on_quit_mouse_entered"]
 [connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_quit_pressed"]

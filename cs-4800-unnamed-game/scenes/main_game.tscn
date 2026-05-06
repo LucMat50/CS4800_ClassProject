@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://bp7fksunth0be" path="res://scripts/HUD.gd" id="4_0rdsr"]
 [ext_resource type="PackedScene" uid="uid://ddryede34j0ya" path="res://scenes/enemyrogue.tscn" id="5_2l77h"]
 [ext_resource type="Script" uid="uid://cy0dgujwfw8qh" path="res://scripts/GameManager.gd" id="6_ygxny"]
+[ext_resource type="AudioStream" uid="uid://q8jltyqnxtbi" path="res://sounds/music.mp3" id="7_sp04v"]
 [ext_resource type="FontFile" uid="uid://ddqrwijxyywq" path="res://assets/Slackey-Regular.ttf" id="8_2l77h"]
 [ext_resource type="StyleBox" uid="uid://bpyd435onm1gx" path="res://ButtonTexture.tres" id="9_nqdth"]
 [ext_resource type="AudioStream" uid="uid://cu35fk3dh5esa" path="res://sounds/buttonSelect.mp3" id="10_o6v7o"]
@@ -162,6 +163,10 @@ position = Vector2(553, 295)
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=829946287]
 zoom = Vector2(1.5, 1.5)
 position_smoothing_enabled = true
+
+[node name="Music" type="AudioStreamPlayer2D" parent="Player" unique_id=1234030232]
+stream = ExtResource("7_sp04v")
+autoplay = true
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1562430419]
 

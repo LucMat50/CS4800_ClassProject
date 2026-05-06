@@ -18,7 +18,6 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameManager="*uid://cy0dgujwfw8qh"
-Music="*uid://c81e2ynsjns5e"
 
 [display]
 
