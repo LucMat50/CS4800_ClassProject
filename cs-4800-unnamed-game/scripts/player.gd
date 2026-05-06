@@ -82,6 +82,7 @@ func die() -> void:
 
 	is_dead = true
 	velocity = Vector2.ZERO
+	$Dead.play()
 	animate.play("death")
 	died.emit()
 

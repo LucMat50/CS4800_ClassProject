@@ -93,8 +93,8 @@ func start_next_wave() -> void:
 	# Skill → more enemies
 	enemies_to_spawn_this_wave = int(base_count * difficulty + (wave * 0.5))
 
-	update_hud()
 	spawn_wave()
+	update_hud()
 
 
 func spawn_wave() -> void:
@@ -103,6 +103,7 @@ func spawn_wave() -> void:
 			return
 
 		spawn_enemy()
+		update_hud()
 
 		# Skill → faster spawn
 		var delay = time_between_spawns / get_difficulty_multiplier()

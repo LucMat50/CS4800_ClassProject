@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://pnw0hthlhi7f" path="res://assets/Player.png" id="2_g2els"]
 [ext_resource type="PackedScene" uid="uid://dkkeqrvxuail1" path="res://scenes/gun.tscn" id="3_qhqgy"]
 [ext_resource type="AudioStream" uid="uid://dmj77arrwv7jo" path="res://sounds/playerHit.mp3" id="4_dqkch"]
+[ext_resource type="AudioStream" uid="uid://cjo1qcssxv2co" path="res://sounds/playerDead.mp3" id="5_qlg0r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qhqgy"]
 atlas = ExtResource("2_g2els")
@@ -351,3 +352,7 @@ position = Vector2(-36, -2)
 
 [node name="Hit" type="AudioStreamPlayer2D" parent="." unique_id=83123863]
 stream = ExtResource("4_dqkch")
+
+[node name="Dead" type="AudioStreamPlayer2D" parent="." unique_id=592279066]
+stream = ExtResource("5_qlg0r")
+volume_db = 4.374
