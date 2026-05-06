@@ -12,6 +12,8 @@
 [ext_resource type="StyleBox" uid="uid://bpyd435onm1gx" path="res://ButtonTexture.tres" id="9_nqdth"]
 [ext_resource type="AudioStream" uid="uid://cu35fk3dh5esa" path="res://sounds/buttonSelect.mp3" id="10_o6v7o"]
 [ext_resource type="AudioStream" uid="uid://drxsyyw6vxva6" path="res://sounds/buttonChoose.mp3" id="11_wjob3"]
+[ext_resource type="Script" uid="uid://8316he55elrg" path="res://scripts/crosshair.gd" id="13_8xp80"]
+[ext_resource type="Texture2D" uid="uid://bq85y8j7toj4f" path="res://assets/crosshair009.png" id="13_wjob3"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_2l77h"]
 vertices = PackedVector2Array(16, 16, -16, 16, -16, -16, 16, -16)
@@ -297,6 +299,13 @@ stream = ExtResource("11_wjob3")
 
 [node name="GameManager" type="Node" parent="." unique_id=712264874]
 script = ExtResource("6_ygxny")
+
+[node name="Crosshair" type="Node2D" parent="." unique_id=1738821675]
+script = ExtResource("13_8xp80")
+
+[node name="Sprite2D" type="Sprite2D" parent="Crosshair" unique_id=1383719857]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("13_wjob3")
 
 [connection signal="mouse_entered" from="HUD/CenterContainer/VBoxContainer/RestartButton" to="HUD" method="_on_restart_button_mouse_entered"]
 [connection signal="mouse_entered" from="HUD/CenterContainer/VBoxContainer/QuitButton" to="HUD" method="_on_quit_button_mouse_entered"]

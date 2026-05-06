@@ -37,6 +37,8 @@ var spawn_points: Array[Marker2D] = []
 
 
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+
 	randomize()
 
 	for child in spawn_points_parent.get_children():
@@ -55,8 +57,8 @@ func _ready() -> void:
 
 	await get_tree().process_frame
 
-	start_next_wave()
 	update_hud()
+	start_next_wave()
 
 
 func _process(delta: float) -> void:
