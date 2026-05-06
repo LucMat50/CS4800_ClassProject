@@ -258,6 +258,7 @@ func die():
 
 	is_dead = true
 	died.emit()
+	$Die.play()
 	animation.play("death")
 
 func chase_animation():

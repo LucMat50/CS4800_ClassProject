@@ -212,6 +212,7 @@ func die():
 		return
 
 	is_dead = true
+	$Die.play()
 	animation.play("death")
 	died.emit()
 	

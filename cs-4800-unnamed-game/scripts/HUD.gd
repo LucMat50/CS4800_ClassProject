@@ -64,9 +64,13 @@ func show_game_over(wave: int, score: int, accuracy: float) -> void:
 
 func _on_restart_pressed() -> void:
 	get_tree().paused = false
+	$ButtonChoose.play()
+	await get_tree().create_timer(1).timeout
 	get_tree().change_scene_to_file("res://scenes/main_game.tscn")  # adjust path if needed
 
 
 func _on_quit_pressed() -> void:
 	get_tree().paused = false
+	$ButtonChoose.play()
+	await get_tree().create_timer(1).timeout
 	get_tree().quit()
