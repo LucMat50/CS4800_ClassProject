@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://ctn313wd0gif3"]
 
 [ext_resource type="FontFile" uid="uid://ddqrwijxyywq" path="res://assets/Slackey-Regular.ttf" id="1_02j60"]
+[ext_resource type="Script" uid="uid://ojca8mcj7uv2" path="res://scripts/you_won.gd" id="1_tio7n"]
+[ext_resource type="StyleBox" uid="uid://bpyd435onm1gx" path="res://ButtonTexture.tres" id="2_cwwad"]
 
 [sub_resource type="Theme" id="Theme_cwwad"]
 default_font = ExtResource("1_02j60")
@@ -13,8 +15,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_tio7n")
 
-[node name="Label" type="Label" parent="." unique_id=159596452]
+[node name="YouWon Label" type="Label" parent="." unique_id=159596452]
 layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 218.0
@@ -23,3 +26,47 @@ theme_override_colors/font_color = Color(0.9098039, 0.28627452, 0.3372549, 1)
 text = "YOU WON"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=407843327]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -60.0
+offset_right = 25.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="Score" type="Label" parent="VBoxContainer" unique_id=1740916553]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_02j60")
+theme_override_font_sizes/font_size = 25
+
+[node name="Accuracy" type="Label" parent="VBoxContainer" unique_id=891239671]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_02j60")
+theme_override_font_sizes/font_size = 25
+
+[node name="Retry" type="Button" parent="VBoxContainer" unique_id=2108398475]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.28627452, 0.3372549, 1)
+theme_override_fonts/font = ExtResource("1_02j60")
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = ExtResource("2_cwwad")
+text = "Retry"
+
+[node name="Quit" type="Button" parent="VBoxContainer" unique_id=1763551800]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.28627452, 0.3372549, 1)
+theme_override_fonts/font = ExtResource("1_02j60")
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = ExtResource("2_cwwad")
+text = "Quit"
+
+[connection signal="pressed" from="VBoxContainer/Retry" to="." method="_on_retry_pressed"]
+[connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_quit_pressed"]

@@ -66,6 +66,8 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("shoot"):
 		register_shot_fired()
+	
+	won()
 
 
 # =========================
@@ -144,13 +146,14 @@ func get_accuracy() -> float:
 	if shots_fired == 0:
 		return 0.5
 	else:
+		GameManager.accuracy = float(shots_hit) / float(shots_fired)
 		return float(shots_hit) / float(shots_fired)
 
 
 func get_skill_score() -> float:
 	var accuracy = get_accuracy()
 	var normalized_score = float(score) / 100.0
-
+	
 	return (accuracy * 5.0) \
 		+ (time_alive * 0.02) \
 		+ (normalized_score * 1.5) \
@@ -203,10 +206,14 @@ func _on_player_died() -> void:
 	game_over = true
 	hud.show_game_over(wave - 1, score, get_accuracy())
 
-
 func start_boss() -> void:
 	boss_started = true
 
 func update_hud() -> void:
 	hud.update_score(score)
 	hud.update_wave(wave)
+
+func won():
+	if wave == 5 and enemies_alive == 0:
+		await get_tree().create_timer(3).timeout
+		get_tree().change_scene_to_file("res://scenes/you_won.tscn")
