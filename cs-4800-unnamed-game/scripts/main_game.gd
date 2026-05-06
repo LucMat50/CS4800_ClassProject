@@ -55,8 +55,8 @@ func _ready() -> void:
 
 	await get_tree().process_frame
 
-	update_hud()
 	start_next_wave()
+	update_hud()
 
 
 func _process(delta: float) -> void:
