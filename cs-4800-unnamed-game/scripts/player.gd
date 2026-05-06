@@ -67,6 +67,7 @@ func take_damage(amount: int = 1) -> void:
 	is_invulnerable = true
 	self.set_process_input(false)
 	self.set_physics_process(false)
+	$Hit.play()
 	animate.play("hurt")
 	await get_tree().create_timer(INVULNERABILITY_TIME).timeout
 	self.set_process_input(true)

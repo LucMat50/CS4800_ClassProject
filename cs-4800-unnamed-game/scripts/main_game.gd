@@ -137,6 +137,7 @@ func spawn_enemy() -> void:
 		enemy.died.connect(_on_enemy_died)
 
 	enemies_alive += 1
+	update_hud()
 
 # =========================
 # SKILL SYSTEM
@@ -204,6 +205,7 @@ func _on_player_health_changed(current_health: int, max_health: int) -> void:
 
 func _on_player_died() -> void:
 	game_over = true
+	await get_tree().create_timer(3).timeout
 	hud.show_game_over(wave - 1, score, get_accuracy())
 
 func start_boss() -> void:
@@ -212,6 +214,7 @@ func start_boss() -> void:
 func update_hud() -> void:
 	hud.update_score(score)
 	hud.update_wave(wave)
+	hud.update_enemies(enemies_alive)
 
 func won():
 	if wave == 5 and enemies_alive == 0:

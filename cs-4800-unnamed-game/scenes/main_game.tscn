@@ -222,6 +222,14 @@ text = "Wave: 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="EnemiesLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=928502724]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_2l77h")
+theme_override_font_sizes/font_size = 25
+text = "Enemies:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="CenterContainer" type="CenterContainer" parent="HUD" unique_id=787326793]
 anchors_preset = 15
 anchor_right = 1.0
@@ -289,3 +297,6 @@ stream = ExtResource("11_wjob3")
 
 [node name="GameManager" type="Node" parent="." unique_id=712264874]
 script = ExtResource("6_ygxny")
+
+[connection signal="mouse_entered" from="HUD/CenterContainer/VBoxContainer/RestartButton" to="HUD" method="_on_restart_button_mouse_entered"]
+[connection signal="mouse_entered" from="HUD/CenterContainer/VBoxContainer/QuitButton" to="HUD" method="_on_quit_button_mouse_entered"]
