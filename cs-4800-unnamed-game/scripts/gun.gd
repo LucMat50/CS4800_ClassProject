@@ -28,6 +28,7 @@ func _process(_delta: float) -> void:
 
 	if Input.is_action_just_pressed("shoot") and can_shoot:
 		shoot()
+		$Pew.play()
 		can_shoot = false
 		shoot_timer.start()
 

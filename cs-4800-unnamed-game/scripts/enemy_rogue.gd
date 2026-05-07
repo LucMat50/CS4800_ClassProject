@@ -1,79 +1,60 @@
 # =========================================
-# enemy.gd
+# enemy_rogue.gd
 # =========================================
 
 extends CharacterBody2D
 
 signal died
 
-# =========================
-# CORE
-# =========================
-
 var player_node: CharacterBody2D
+
 var is_dead := false
 var current_health: int
 
-# =========================
-# AI STATE
-# =========================
-
+# AI
 enum AIState {
 	ROAM,
 	CHASE,
-	ATTACK,
-	REPOSITION
+	ATTACK
 }
 
 var current_state = AIState.ROAM
 
 var has_aggro := false
-var aggro_timer := 0.0
 
-@export var aggro_memory_time := 9999.0
-
-# =========================
 # ROAM
-# =========================
-
 var roam_target: Vector2
 var roam_timer := 0.0
 
 @export var roam_interval := 2.0
 
-# =========================
 # STUCK
-# =========================
-
 var stuck_timer := 0.0
 var last_position: Vector2
 
-# =========================
-# NODES
-# =========================
-
 @onready var sprite = $Sprite2D
 @onready var animation = $Sprite2D/AnimationPlayer
+@onready var collision = $CollisionShape2D
 @onready var nav_agent: NavigationAgent2D = $NavAgent
 
-# =========================
-# STATS
-# =========================
-
-@export var speed := 200
-@export var max_health := 3
+@export var speed := 320
+@export var max_health := 1
 @export var damage := 1
 
 @export var vision_range := 200.0
 @export var stop_distance := 20.0
 
-# Skill behavior
-@export var normal_prediction := 0.35
-@export var hard_prediction := 0.65
-@export var flank_distance := 90.0
+# INVIS
+@export var invis_cooldown := 4.0
+@export var invis_duration := 2.5
+@export var reveal_range := 90.0
+
+var invis_timer := 0.0
+var invis_active := false
 
 
 func _ready():
+
 	add_to_group("Enemy")
 
 	current_health = max_health
@@ -81,6 +62,11 @@ func _ready():
 	player_node = get_tree().get_first_node_in_group("Player")
 
 	last_position = global_position
+
+	invis_timer = randf_range(
+		1.0,
+		invis_cooldown
+	)
 
 	await get_tree().physics_frame
 	await get_tree().physics_frame
@@ -97,25 +83,27 @@ func _ready():
 
 
 func _physics_process(delta):
-	if is_dead or player_node == null:
+
+	if is_dead:
 		return
 
 	handle_stuck(delta)
 
 	update_ai_state()
 
+	handle_invisibility(delta)
+
 	var target = get_ai_target()
 
-	nav_agent.target_position = get_safe_target_position(target)
+	nav_agent.target_position = get_safe_target_position(
+		target
+	)
 
 	move_along_path()
 
 
-# =========================
-# AI STATE LOGIC
-# =========================
-
 func update_ai_state():
+
 	var distance = global_position.distance_to(
 		player_node.global_position
 	)
@@ -127,13 +115,6 @@ func update_ai_state():
 
 	if can_see:
 		has_aggro = true
-		aggro_timer = aggro_memory_time
-
-	elif has_aggro:
-		aggro_timer -= get_physics_process_delta_time()
-
-		if aggro_timer <= 0:
-			has_aggro = false
 
 	match current_state:
 
@@ -149,20 +130,8 @@ func update_ai_state():
 			if distance > stop_distance * 1.5:
 				current_state = AIState.CHASE
 
-			elif get_player_skill() >= 8:
-				current_state = AIState.REPOSITION
 
-		AIState.REPOSITION:
-			if distance > stop_distance * 2:
-				current_state = AIState.CHASE
-
-
-# =========================
-# TARGETING
-# =========================
-
-func get_ai_target() -> Vector2:
-	var skill = get_player_skill()
+func get_ai_target():
 
 	match current_state:
 
@@ -170,49 +139,12 @@ func get_ai_target() -> Vector2:
 			return handle_roam()
 
 		AIState.CHASE:
-			if skill < 5:
-				return player_node.global_position
-
-			elif skill < 8:
-				return (
-					player_node.global_position
-					+ player_node.velocity * normal_prediction
-				)
-
-			else:
-				return get_flank_position()
+			return player_node.global_position
 
 		AIState.ATTACK:
 			return global_position
 
-		AIState.REPOSITION:
-			return get_flank_position()
-
 	return global_position
-
-
-func get_flank_position():
-	var player_pos = player_node.global_position
-	var player_vel = player_node.velocity
-
-	var move_dir = player_vel
-
-	if move_dir.length() == 0:
-		move_dir = player_pos - global_position
-
-	move_dir = move_dir.normalized()
-
-	var perpendicular = Vector2(
-		-move_dir.y,
-		move_dir.x
-	)
-
-	var side = 1 if randf() < 0.5 else -1
-
-	return (
-		player_pos
-		+ perpendicular * flank_distance * side
-	)
 
 
 # =========================
@@ -220,6 +152,7 @@ func get_flank_position():
 # =========================
 
 func handle_roam():
+
 	roam_timer -= get_physics_process_delta_time()
 
 	if roam_timer <= 0 or nav_agent.is_navigation_finished():
@@ -230,6 +163,7 @@ func handle_roam():
 
 
 func get_random_nav_point():
+
 	var map = get_world_2d().navigation_map
 
 	if NavigationServer2D.map_get_iteration_id(map) == 0:
@@ -257,12 +191,11 @@ func move_along_path():
 
 	var to_point = next_point - global_position
 
-	var distance_to_player = global_position.distance_to(
+	var distance = global_position.distance_to(
 		player_node.global_position
 	)
 
-	# Prevent sticking to player
-	if has_aggro and distance_to_player <= stop_distance:
+	if has_aggro and distance <= stop_distance:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
@@ -270,13 +203,19 @@ func move_along_path():
 	if to_point.length() < 4:
 		return
 
-	velocity = to_point.normalized() * speed
+	var current_speed = speed
+
+	if invis_active:
+		current_speed *= 1.2
+
+	velocity = to_point.normalized() * current_speed
 
 	chase_animation()
 
 	move_and_slide()
 
-	sprite.flip_h = velocity.x < 0
+	if not invis_active:
+		sprite.flip_h = velocity.x < 0
 
 
 # =========================
@@ -331,13 +270,53 @@ func can_see_player():
 	)
 
 
-func get_player_skill():
-	var gm = get_tree().current_scene
+# =========================
+# INVISIBILITY
+# =========================
 
-	if gm.has_method("get_skill_score"):
-		return gm.get_skill_score()
+func handle_invisibility(delta):
 
-	return 0.0
+	var distance = global_position.distance_to(
+		player_node.global_position
+	)
+
+	invis_timer -= delta
+
+	if !invis_active and invis_timer <= 0:
+		enter_invis()
+
+	if invis_active:
+		if (
+			invis_timer <= -invis_duration
+			or distance <= reveal_range
+		):
+			exit_invis()
+
+	if !invis_active and distance < 200:
+		invis_timer -= delta * 1.5
+
+
+func enter_invis():
+
+	invis_active = true
+
+	sprite.visible = false
+	collision.disabled = true
+
+	invis_timer = 0.0
+
+
+func exit_invis():
+
+	invis_active = false
+
+	sprite.visible = true
+	collision.disabled = false
+
+	invis_timer = randf_range(
+		1.5,
+		invis_cooldown
+	)
 
 
 # =========================
@@ -366,6 +345,8 @@ func die():
 
 	died.emit()
 
+	sprite.visible = true
+
 	nav_agent.target_position = global_position
 
 	if has_node("Die"):
@@ -388,7 +369,7 @@ func chase_animation():
 
 func _on_area_2d_body_entered(body):
 
-	if is_dead:
+	if is_dead or invis_active:
 		return
 
 	if (

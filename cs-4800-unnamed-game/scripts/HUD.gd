@@ -3,12 +3,14 @@ extends CanvasLayer
 @onready var health_label: Label = $MarginContainer/VBoxContainer/HealthLabel
 @onready var score_label: Label = $MarginContainer/VBoxContainer/ScoreLabel
 @onready var wave_label: Label = $MarginContainer/VBoxContainer/WaveLabel
+@onready var enemy_label: Label = $MarginContainer/VBoxContainer/EnemiesLabel
 @onready var game_over_label = $CenterContainer/VBoxContainer/GameOverLabel
 @onready var summary_wave_label = $CenterContainer/VBoxContainer/SummaryWaveLabel
 @onready var summary_score_label = $CenterContainer/VBoxContainer/SummaryScoreLabel
 @onready var summary_accuracy_label = $CenterContainer/VBoxContainer/SummaryAccuracyLabel
 @onready var restart_button = $CenterContainer/VBoxContainer/RestartButton
 @onready var quit_button = $CenterContainer/VBoxContainer/QuitButton
+@onready var colorbg = $ColorRect
 
 func _ready() -> void:
 	GameManager.hud = self
@@ -37,12 +39,15 @@ func update_score(new_score: int) -> void:
 		return
 	score_label.text = "Score: %d" % new_score
 
-
 func update_wave(new_wave: int) -> void:
 	if wave_label == null:
 		return
 	wave_label.text = "Wave: %d" % new_wave
 
+func update_enemies(enemy_amount: int) -> void:
+	if enemy_label == null:
+		return
+	enemy_label.text = "Enemies: %d" % enemy_amount
 
 func show_game_over(wave: int, score: int, accuracy: float) -> void:
 	if game_over_label != null:
@@ -58,13 +63,23 @@ func show_game_over(wave: int, score: int, accuracy: float) -> void:
 
 	restart_button.visible = true
 	quit_button.visible = true
+	colorbg.visible = true
 
 
 func _on_restart_pressed() -> void:
 	get_tree().paused = false
+	$ButtonChoose.play()
+	await get_tree().create_timer(1).timeout
 	get_tree().change_scene_to_file("res://scenes/main_game.tscn")  # adjust path if needed
 
+func _on_restart_button_mouse_entered() -> void:
+	$ButtonSelect.play()
 
 func _on_quit_pressed() -> void:
 	get_tree().paused = false
+	$ButtonChoose.play()
+	await get_tree().create_timer(1).timeout
 	get_tree().quit()
+
+func _on_quit_button_mouse_entered() -> void:
+	$ButtonSelect.play()

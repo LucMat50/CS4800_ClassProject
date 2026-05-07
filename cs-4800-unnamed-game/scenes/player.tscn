@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://c17lnk8ttr3bc" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://pnw0hthlhi7f" path="res://assets/Player.png" id="2_g2els"]
 [ext_resource type="PackedScene" uid="uid://dkkeqrvxuail1" path="res://scenes/gun.tscn" id="3_qhqgy"]
+[ext_resource type="AudioStream" uid="uid://dmj77arrwv7jo" path="res://sounds/playerHit.mp3" id="4_dqkch"]
+[ext_resource type="AudioStream" uid="uid://cjo1qcssxv2co" path="res://sounds/playerDead.mp3" id="5_qlg0r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qhqgy"]
 atlas = ExtResource("2_g2els")
@@ -326,7 +328,7 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
-size = Vector2(25, 70)
+size = Vector2(25, 19)
 
 [node name="Player" type="CharacterBody2D" unique_id=835060394 groups=["Player"]]
 z_index = 1
@@ -342,8 +344,15 @@ libraries/ = SubResource("AnimationLibrary_qhqgy")
 autoplay = &"default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1602922000]
-position = Vector2(-0.5, 0)
+position = Vector2(-0.5, 25.5)
 shape = SubResource("RectangleShape2D_g2els")
 
 [node name="Gun" parent="." unique_id=1052325760 instance=ExtResource("3_qhqgy")]
 position = Vector2(-36, -2)
+
+[node name="Hit" type="AudioStreamPlayer2D" parent="." unique_id=83123863]
+stream = ExtResource("4_dqkch")
+
+[node name="Dead" type="AudioStreamPlayer2D" parent="." unique_id=592279066]
+stream = ExtResource("5_qlg0r")
+volume_db = 4.374

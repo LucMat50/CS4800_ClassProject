@@ -2,7 +2,7 @@ extends Node2D
 
 const ENEMY_QUICK = preload("res://scenes/enemyquick.tscn")
 const ENEMY_TANK  = preload("res://scenes/enemytank.tscn")
-const ENEMY_ROGUE = preload("res://scenes/enemyRogue.tscn")
+const ENEMY_ROGUE = preload("res://scenes/enemyrogue.tscn")
 
 @export var time_between_spawns: float = 0.6
 @export var time_between_waves: float = 2.0
@@ -37,6 +37,8 @@ var spawn_points: Array[Marker2D] = []
 
 
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+
 	randomize()
 
 	for child in spawn_points_parent.get_children():
@@ -63,6 +65,11 @@ func _process(delta: float) -> void:
 	if game_over:
 		return
 	time_alive += delta
+	
+	if Input.is_action_just_pressed("shoot"):
+		register_shot_fired()
+	
+	won()
 
 
 # =========================
@@ -88,8 +95,8 @@ func start_next_wave() -> void:
 	# Skill → more enemies
 	enemies_to_spawn_this_wave = int(base_count * difficulty + (wave * 0.5))
 
-	update_hud()
 	spawn_wave()
+	update_hud()
 
 
 func spawn_wave() -> void:
@@ -98,6 +105,7 @@ func spawn_wave() -> void:
 			return
 
 		spawn_enemy()
+		update_hud()
 
 		# Skill → faster spawn
 		var delay = time_between_spawns / get_difficulty_multiplier()
@@ -132,7 +140,7 @@ func spawn_enemy() -> void:
 		enemy.died.connect(_on_enemy_died)
 
 	enemies_alive += 1
-
+	update_hud()
 
 # =========================
 # SKILL SYSTEM
@@ -141,13 +149,15 @@ func spawn_enemy() -> void:
 func get_accuracy() -> float:
 	if shots_fired == 0:
 		return 0.5
-	return float(shots_hit) / float(shots_fired)
+	else:
+		GameManager.accuracy = float(shots_hit) / float(shots_fired)
+		return float(shots_hit) / float(shots_fired)
 
 
 func get_skill_score() -> float:
 	var accuracy = get_accuracy()
 	var normalized_score = float(score) / 100.0
-
+	
 	return (accuracy * 5.0) \
 		+ (time_alive * 0.02) \
 		+ (normalized_score * 1.5) \
@@ -167,7 +177,6 @@ func get_difficulty_multiplier() -> float:
 		current_ai_state = "Increasing"
 		return 1.3
 
-
 # =========================
 # EVENTS
 # =========================
@@ -178,6 +187,7 @@ func register_shot_fired() -> void:
 func register_shot_hit() -> void:
 	shots_hit += 1
 	score += 10
+	GameManager.score = score
 	update_hud()
 
 func register_player_damage(amount: int = 1) -> void:
@@ -185,7 +195,9 @@ func register_player_damage(amount: int = 1) -> void:
 
 func _on_enemy_died() -> void:
 	enemies_alive -= 1
-
+	
+	register_shot_hit()
+	
 	if enemies_alive <= 0 and not waiting_for_next_wave:
 		waiting_for_next_wave = true
 		await get_tree().create_timer(time_between_waves).timeout
@@ -196,13 +208,18 @@ func _on_player_health_changed(current_health: int, max_health: int) -> void:
 
 func _on_player_died() -> void:
 	game_over = true
+	await get_tree().create_timer(3).timeout
 	hud.show_game_over(wave - 1, score, get_accuracy())
-
 
 func start_boss() -> void:
 	boss_started = true
 
-
 func update_hud() -> void:
 	hud.update_score(score)
 	hud.update_wave(wave)
+	hud.update_enemies(enemies_alive)
+
+func won():
+	if wave == 5 and enemies_alive == 0:
+		await get_tree().create_timer(3).timeout
+		get_tree().change_scene_to_file("res://scenes/you_won.tscn")

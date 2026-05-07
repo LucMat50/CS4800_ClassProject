@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bb4n3buw7rail" path="res://scripts/gun.gd" id="1_x77fm"]
 [ext_resource type="Texture2D" uid="uid://dkv7hvtn2kro0" path="res://assets/Gun1.png" id="2_og67c"]
+[ext_resource type="AudioStream" uid="uid://bn7wmogwi0ht0" path="res://sounds/gun.mp3" id="3_gp1hk"]
 
 [node name="Gun" type="Node2D" unique_id=1052325760]
 script = ExtResource("1_x77fm")
@@ -15,5 +16,8 @@ texture = ExtResource("2_og67c")
 [node name="ShootPosition" type="Marker2D" parent="RotationOffset" unique_id=971378948]
 
 [node name="ShootTimer" type="Timer" parent="." unique_id=40392165]
+
+[node name="Pew" type="AudioStreamPlayer2D" parent="." unique_id=1974101156]
+stream = ExtResource("3_gp1hk")
 
 [connection signal="timeout" from="ShootTimer" to="." method="_on_shoot_timer_timeout"]

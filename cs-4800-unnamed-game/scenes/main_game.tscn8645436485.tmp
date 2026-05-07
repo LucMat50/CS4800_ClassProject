@@ -6,15 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://dwyuhcgaey2yg" path="res://scenes/enemytank.tscn" id="2_ygxny"]
 [ext_resource type="Script" uid="uid://bl0g8hv13mald" path="res://scripts/main_game.gd" id="3_d2op2"]
 [ext_resource type="Script" uid="uid://bp7fksunth0be" path="res://scripts/HUD.gd" id="4_0rdsr"]
-[ext_resource type="PackedScene" uid="uid://ddryede34j0ya" path="res://scenes/enemyrogue.tscn" id="5_2l77h"]
+[ext_resource type="Script" uid="uid://calc50sxiwwtp" path="res://scripts/enemy_rogue.gd" id="4_wi4c7"]
 [ext_resource type="Script" uid="uid://cy0dgujwfw8qh" path="res://scripts/GameManager.gd" id="6_ygxny"]
-[ext_resource type="AudioStream" uid="uid://q8jltyqnxtbi" path="res://sounds/music.mp3" id="7_sp04v"]
 [ext_resource type="FontFile" uid="uid://ddqrwijxyywq" path="res://assets/Slackey-Regular.ttf" id="8_2l77h"]
-[ext_resource type="StyleBox" uid="uid://bpyd435onm1gx" path="res://ButtonTexture.tres" id="9_nqdth"]
-[ext_resource type="AudioStream" uid="uid://cu35fk3dh5esa" path="res://sounds/buttonSelect.mp3" id="10_o6v7o"]
-[ext_resource type="AudioStream" uid="uid://drxsyyw6vxva6" path="res://sounds/buttonChoose.mp3" id="11_wjob3"]
-[ext_resource type="Script" uid="uid://8316he55elrg" path="res://scripts/crosshair.gd" id="13_8xp80"]
-[ext_resource type="Texture2D" uid="uid://bq85y8j7toj4f" path="res://assets/crosshair009.png" id="13_wjob3"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_2l77h"]
 vertices = PackedVector2Array(16, 16, -16, 16, -16, -16, 16, -16)
@@ -136,10 +130,6 @@ physics_layer_0/collision_layer = 1
 navigation_layer_0/layers = 1
 sources/1 = SubResource("TileSetAtlasSource_70vka")
 
-[sub_resource type="Theme" id="Theme_2l77h"]
-default_font = ExtResource("8_2l77h")
-default_font_size = 25
-
 [node name="main_game" type="Node2D" unique_id=2068060570]
 script = ExtResource("3_d2op2")
 
@@ -152,10 +142,21 @@ rendering_quadrant_size = 32
 physics_quadrant_size = 32
 
 [node name="EnemyQuick" parent="." unique_id=407558397 instance=ExtResource("1_ipu61")]
+speed = 200
 
-[node name="EnemyTank" parent="." unique_id=244753795 instance=ExtResource("2_ygxny")]
+[node name="EnemyTank" parent="." unique_id=567742270 instance=ExtResource("2_ygxny")]
+speed = 200
 
-[node name="EnemyRogue" parent="." unique_id=463325057 instance=ExtResource("5_2l77h")]
+[node name="EnemyRogue" parent="." unique_id=780259437 instance=ExtResource("2_ygxny")]
+script = ExtResource("4_wi4c7")
+aggro_memory_time = null
+speed = 175.0
+max_health = null
+damage = null
+vision_range = null
+invis_cooldown = null
+invis_duration = null
+reveal_range = null
 
 [node name="Player" parent="." unique_id=835060394 instance=ExtResource("1_s3esy")]
 position = Vector2(553, 295)
@@ -163,10 +164,6 @@ position = Vector2(553, 295)
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=829946287]
 zoom = Vector2(1.5, 1.5)
 position_smoothing_enabled = true
-
-[node name="Music" type="AudioStreamPlayer2D" parent="Player" unique_id=1234030232]
-stream = ExtResource("7_sp04v")
-autoplay = true
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1562430419]
 
@@ -187,55 +184,31 @@ position = Vector2(1130, -23)
 [node name="HUD" type="CanvasLayer" parent="." unique_id=1715156630]
 script = ExtResource("4_0rdsr")
 
-[node name="ColorRect" type="ColorRect" parent="HUD" unique_id=1537560530]
-visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_stretch_ratio = 2.47
-color = Color(0, 0, 0, 0.5647059)
-
 [node name="MarginContainer" type="MarginContainer" parent="HUD" unique_id=308466452]
-offset_right = 195.0
-offset_bottom = 145.0
+offset_right = 85.0
+offset_bottom = 77.0
+metadata/_edit_lock_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD/MarginContainer" unique_id=2075153227]
 layout_mode = 2
-alignment = 1
 
 [node name="HealthLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=2095534835]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_2l77h")
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 21
 text = "Health: 5/5"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="ScoreLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=1702839532]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_2l77h")
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 21
 text = "Score: 0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="WaveLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=1701518]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_2l77h")
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 21
 text = "Wave: 1"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="EnemiesLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=928502724]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("8_2l77h")
-theme_override_font_sizes/font_size = 25
-text = "Enemies:"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="HUD" unique_id=787326793]
 anchors_preset = 15
@@ -247,15 +220,11 @@ metadata/_edit_lock_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD/CenterContainer" unique_id=65212230]
 layout_mode = 2
-theme_override_constants/separation = 10
 alignment = 1
 
 [node name="GameOverLabel" type="Label" parent="HUD/CenterContainer/VBoxContainer" unique_id=138031964]
 visible = false
-modulate = Color(0.91023767, 0.286704, 0.33655745, 1)
 layout_mode = 2
-theme = SubResource("Theme_2l77h")
-theme_override_font_sizes/font_size = 50
 text = "GAME OVER"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -263,54 +232,24 @@ vertical_alignment = 1
 [node name="SummaryWaveLabel" type="Label" parent="HUD/CenterContainer/VBoxContainer" unique_id=1617114264]
 visible = false
 layout_mode = 2
-theme_override_fonts/font = ExtResource("8_2l77h")
-theme_override_font_sizes/font_size = 25
 
 [node name="SummaryScoreLabel" type="Label" parent="HUD/CenterContainer/VBoxContainer" unique_id=677504629]
 visible = false
 layout_mode = 2
-theme_override_fonts/font = ExtResource("8_2l77h")
-theme_override_font_sizes/font_size = 25
 
 [node name="SummaryAccuracyLabel" type="Label" parent="HUD/CenterContainer/VBoxContainer" unique_id=1739043830]
 visible = false
 layout_mode = 2
-theme_override_fonts/font = ExtResource("8_2l77h")
-theme_override_font_sizes/font_size = 25
 
 [node name="RestartButton" type="Button" parent="HUD/CenterContainer/VBoxContainer" unique_id=364629728]
 visible = false
 layout_mode = 2
-theme_override_colors/font_color = Color(0.85490197, 0.23137255, 0.34901962, 1)
-theme_override_fonts/font = ExtResource("8_2l77h")
-theme_override_font_sizes/font_size = 25
-theme_override_styles/normal = ExtResource("9_nqdth")
 text = "Restart"
 
 [node name="QuitButton" type="Button" parent="HUD/CenterContainer/VBoxContainer" unique_id=728880137]
 visible = false
 layout_mode = 2
-theme_override_colors/font_color = Color(0.85490197, 0.23137255, 0.34901962, 1)
-theme_override_fonts/font = ExtResource("8_2l77h")
-theme_override_font_sizes/font_size = 25
-theme_override_styles/normal = ExtResource("9_nqdth")
 text = "Quit"
-
-[node name="ButtonSelect" type="AudioStreamPlayer2D" parent="HUD" unique_id=1232423191]
-stream = ExtResource("10_o6v7o")
-
-[node name="ButtonChoose" type="AudioStreamPlayer2D" parent="HUD" unique_id=555192280]
-stream = ExtResource("11_wjob3")
 
 [node name="GameManager" type="Node" parent="." unique_id=712264874]
 script = ExtResource("6_ygxny")
-
-[node name="Crosshair" type="Node2D" parent="." unique_id=1738821675]
-script = ExtResource("13_8xp80")
-
-[node name="Sprite2D" type="Sprite2D" parent="Crosshair" unique_id=1383719857]
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("13_wjob3")
-
-[connection signal="mouse_entered" from="HUD/CenterContainer/VBoxContainer/RestartButton" to="HUD" method="_on_restart_button_mouse_entered"]
-[connection signal="mouse_entered" from="HUD/CenterContainer/VBoxContainer/QuitButton" to="HUD" method="_on_quit_button_mouse_entered"]
